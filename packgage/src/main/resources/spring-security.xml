@@ -14,8 +14,8 @@
         <security:intercept-url pattern="/login**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
         <security:form-login  login-page="/login" 
-                              default-target-url="/admin" 
                               authentication-failure-url="/login?error" 
+                              authentication-success-handler-ref="myAuthenticationSuccessHandler"
 			                  username-parameter="username"
 			                  password-parameter="password"/>  
 		<security:logout logout-success-url="/login?logout"/>	
@@ -37,4 +37,6 @@
     	<property name="useForward" value="true"/>
     </bean>
     
+    <!-- 登录成功，自定义跳转 -->
+    <bean id="myAuthenticationSuccessHandler" class="packgage.security.myAuthenticationSuccessHandler"></bean>
 </beans>
