@@ -1,0 +1,28 @@
+package com.berheley.ichart.socketIo;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.springframework.stereotype.Component;
+
+import com.corundumstudio.socketio.SocketIOClient;
+
+@Component
+public class SocketIOClientCache {
+    
+	private static Map<String,SocketIOClient> clients = new ConcurrentHashMap<String,SocketIOClient>();
+	
+    public void addClient(SocketIOClient client,TMessageBean messageBean){
+    	client.set("userId", messageBean.getFromClient());
+        clients.put(messageBean.getFromClient(),client);
+    }
+    
+    public void remove(String userId) {
+        clients.remove(userId);
+    }
+
+	public SocketIOClient getClient(String toClient) {
+		return clients.get(toClient);
+	}
+    
+}

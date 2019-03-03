@@ -1,0 +1,148 @@
+package com.berheley.ichart.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mobile.device.Device;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.berheley.ichart.domain.User;
+import com.berheley.ichart.security.JwtAuthenticationRequest;
+import com.berheley.ichart.security.JwtAuthenticationResponse;
+import com.berheley.ichart.security.JwtTokenUtil;
+import com.berheley.ichart.service.UserService;
+
+@RestController
+public class AuthenticationRestController {
+
+    @Value("${jwt.header}")
+    private String tokenHeader;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+	private UserService userService;
+    
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<JwtAuthenticationResponse> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, Device device) throws AuthenticationException {
+
+        // Perform the security
+        System.out.print(authenticationRequest.getUsername());
+        System.out.print(authenticationRequest.getPassword());
+
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authenticationRequest.getUsername(),
+                        authenticationRequest.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        
+        // Reload password post-security so we can generate token
+        User user = (User) userService.loadUserByUsername(authenticationRequest.getUsername());
+        final String token = jwtTokenUtil.generateToken(user);
+        System.out.println("-----------------------------------"+token);
+        // Return the token
+        return new ResponseEntity<JwtAuthenticationResponse>(new JwtAuthenticationResponse(token), HttpStatus.OK);
+        //return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+    }
+    
+    @RequestMapping(value="/logout", method = RequestMethod.GET)
+    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){    
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return "redirect:/?logout";
+    }
+    
+    /**
+     * 注册新用户
+     * @param request
+     * @param response
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/register",method=RequestMethod.POST)
+    public String registerNewUser (HttpServletRequest request,HttpServletResponse response) {
+    	String mesg = "success";
+    	mesg = userService.registerNewUser(request);
+    	return mesg;
+    }
+    
+    /**
+     * 发送验证码
+     * @param request
+     * @param response
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/sendCode")
+    public String sendCode (HttpServletRequest request,HttpServletResponse response) {
+    	String mesg = "success";	
+    	mesg = userService.validate(request);
+    	return mesg;
+    }
+    
+    /**
+     * 验证验证码
+     * @param request
+     * @param identifyingCode
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/validate")
+    public boolean validate(HttpServletRequest request,@RequestParam(name="identifyingCode",required=true) String identifyingCode) {
+    	HttpSession session = request.getSession();
+    	if(session.getAttribute("identifyingCode").toString().equals(identifyingCode)) {
+    		return true;
+    	}else {
+    		return false;
+    	}
+    }
+    
+    /**
+     * 执行注册
+     * @param request
+     * @param response
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/doRegister")
+    public boolean doRegister(HttpServletRequest request,HttpServletResponse response) {
+    	return userService.doRegister(request);
+    }
+    
+    /**
+     * 根据登录名获取用户
+     * @param request
+     * @param response
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/getUserByname")
+    public boolean getUserByname(HttpServletRequest request,HttpServletResponse response) {
+    	return userService.getUserByname(request);
+    }
+    
+}

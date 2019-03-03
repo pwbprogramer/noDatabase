@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head lang="en">
+	    <meta charset="UTF-8">
+	    <title>直播页面</title>
+	    <script src="/js/video/libs/jquery-2.1.1.min.js"></script>
+	</head>
+	<body>
+		<div>
+		  <button type="button" onclick="exitLive();">退出直播间</button>
+		  <button type="button" onclick="enterLive();">进入直播间</button>
+		  <button type="button" onclick="closeAll();">全部关闭</button>
+		  <button type="button" onclick="showAll();">全部开启</button>
+		  <button type="button" onclick="disconnectDesktop();">关闭共享屏幕</button>
+		  <button type="button" onclick="showDesktop();">开启共享屏幕</button>
+		  <button type="button" onclick="disconnectShare();">关闭本地视频</button>
+		  <button type="button" onclick="showShare();">开启本地视频</button>
+		  <button type="button" onclick="toSee();">进入查看页面</button>
+		</div>
+		<div style="position:fixed;right: 20.5px;bottom: -91px;">
+			<iframe name="myiframe" id="iframe_Share" src="/videoLiveCamera" frameborder="0" align="left" width="300" height="300" scrolling="no"></iframe>
+		</div>
+	    <iframe name="myiframe1" id="iframe_Desktop" src="/videoLiveDesktop" frameborder="0" width="1200" height="540" align="left" scrolling="no"></iframe>
+	    <script type="text/javascript">
+	    	var desktopUserId = "";
+	    	var shareUserId = "";
+	    	
+	    	function exitLive(){
+				document.getElementById("iframe_Share").contentWindow.unload();
+				document.getElementById("iframe_Desktop").contentWindow.unload();
+			}
+	    	function enterLive(){
+				document.getElementById("iframe_Share").contentWindow.init();
+				document.getElementById("iframe_Desktop").contentWindow.init();
+			}
+			function closeAll(){
+				document.getElementById("iframe_Share").contentWindow.closeCamera();
+				document.getElementById("iframe_Desktop").contentWindow.closeDesktop();
+			}
+			function showAll(){
+				document.getElementById("iframe_Share").contentWindow.openCamera();
+				document.getElementById("iframe_Desktop").contentWindow.openDesktop();
+			}
+			function disconnectDesktop(){
+				document.getElementById("iframe_Desktop").contentWindow.closeDesktop();
+			}
+			function showDesktop(){
+				document.getElementById("iframe_Desktop").contentWindow.openDesktop();
+			}
+			function disconnectShare(){
+				document.getElementById("iframe_Share").contentWindow.closeCamera();
+			}
+			function showShare(){
+				document.getElementById("iframe_Share").contentWindow.openCamera();
+			}
+			function toSee(){
+				var host = window.location.host;
+				var address = host+"/videoWatch?Did="+desktopUserId+"&Vid="+shareUserId;
+				window.open(address, "_blank"); 
+			}
+			
+			$(function(){
+				document.getElementById("iframe_Share").onload = function(){
+					document.getElementById("iframe_Share").contentWindow.init();
+				};
+				document.getElementById("iframe_Desktop").onload = function(){
+					document.getElementById("iframe_Desktop").contentWindow.init();
+				};
+			});
+		</script>
+	</body>
+</html>

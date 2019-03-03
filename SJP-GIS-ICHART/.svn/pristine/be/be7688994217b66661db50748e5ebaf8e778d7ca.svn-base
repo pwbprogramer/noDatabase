@@ -1,0 +1,77 @@
+package com.berheley.ichart.socketIo.impl;
+
+import java.util.LinkedList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.berheley.ichart.socketIo.EventListenner;
+import com.berheley.ichart.socketIo.model.TMessageBean;
+import com.corundumstudio.socketio.HandshakeData;
+import com.corundumstudio.socketio.SocketIOClient;
+import com.corundumstudio.socketio.annotation.OnConnect;
+import com.corundumstudio.socketio.annotation.OnDisconnect;
+import com.corundumstudio.socketio.annotation.OnEvent;
+
+/**
+ * 监听类
+ * @author pwb
+ *
+ */
+@Component
+public class PushMessage implements EventListenner{
+	
+	/**
+	 * current client map
+	 */
+	@Autowired
+	private SocketIOClientCache clientCache;
+	
+	@Autowired
+    private SocketIOResponse socketIOResponse;
+	
+	@Autowired
+	private UserOffLineServiceImpl UserOffLineServiceImpl;
+     
+    @OnConnect
+    public void onConnect(SocketIOClient client) {
+    	HandshakeData hd = client.getHandshakeData();
+    	TMessageBean messageBean = new TMessageBean();
+    	//记录登录用户
+    	messageBean.setFromClient(hd.getSingleUrlParam("user"));
+    	clientCache.addClient(client, messageBean);
+    	//获取用户离线消息
+    	LinkedList<TMessageBean> offLineMessage = UserOffLineServiceImpl.readMessageInRedis(messageBean);
+        while(offLineMessage.size()!=0) {
+        	System.out.println(offLineMessage.pop().toString());
+        }
+    }
+ 
+    
+    @OnDisconnect
+    public void onDisconnect(SocketIOClient client) {
+    	clientCache.removeClient(client.get("userId"));
+    }
+
+	@OnEvent("sendMessage")
+	public void sendMessage(TMessageBean messageBean) {
+		 SocketIOClient ioClients = clientCache.getClient(messageBean.getToClient());
+         //当用户离线时，暂存消息
+		 if (ioClients == null) {
+        	UserOffLineServiceImpl.saveMessageInRedis(messageBean);
+            return;
+         }
+	     socketIOResponse.sendEvent(ioClients,"sendMessage",messageBean);
+	}
+	
+	
+	@OnEvent("OnDataMessage")
+	public void OnDataMessage(TMessageBean messageBean) {
+		SocketIOClient ioClients = clientCache.getClient(messageBean.getToClient());
+		if (ioClients == null) {
+			System.out.println("你发送消息的用户不在线");
+			return;
+		}
+		socketIOResponse.sendEvent(ioClients,"OnDataMessage",messageBean);
+	}
+}

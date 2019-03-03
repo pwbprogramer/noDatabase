@@ -1,0 +1,170 @@
+/**
+ *  author:pingweibo
+ *  time:2018/11/01
+ *  function:登录js
+ */
+
+/**
+ * 验证码倒计时
+ */
+function countDown(timeCountDown){
+   if(timeCountDown!=0){
+	   timeCountDown--;
+	   $("#afreshButton").text("("+timeCountDown+"S)秒重新发送");
+   $("#afreshButton").attr("disabled",true);
+	   setTimeout(function() {
+		   countDown(timeCountDown) }
+       ,1000)
+   }else{
+	   $("#afreshButton").attr("disabled",false);
+   $("#afreshButton").text("重新发送");
+   }
+};
+
+/**
+ * 发送验证码
+ */
+function sendIdentifyingCode(type){
+	//表单验证
+	if(type=="login"){
+		if(!$('#loginForm').validate().form()){
+			return;
+		}
+	}else{
+		if(!$('#registerForm').validate().form()){
+			return;
+		}
+	}
+	//发送验证码
+//	$.ajax({
+//		url:"",
+//		type:"post",
+//		data:{
+//			type:type
+//		},
+//		success:function(){
+//			
+//		}
+//	})
+};
+
+/**
+ * 校验验证码
+ */
+function checkCode(){
+	
+};
+
+/**
+ * 完成注册并登录
+ */
+function registerAndLogin(){
+	$.ajax({
+		url:"",
+		type:"post",
+		data:{
+			
+		},
+		success:function(){
+			
+		}
+	})
+};
+
+/**
+ * 登录
+ */
+function login(){
+	$.ajax({
+		url:"",
+		type:"post",
+		data:{
+			
+		},
+		success:function(){
+			
+		}
+	})
+};
+
+/**
+ * 用户是否已经注册
+ */
+function sendRegisterUserMessage(){
+	$.ajax({
+		url:"",
+		type:"post",
+		data:{
+			
+		},
+		success:function(){
+			
+		}
+	})
+};
+
+/**
+ * 检测登录用户是否存在
+ */
+function checkUserExist(){
+	$.ajax({
+		url:"",
+		type:"post",
+		data:{
+			
+		},
+		success:function(){
+			
+		}
+	})
+};
+
+/**
+ * 获取form表单值
+ */
+function getValue(Object){
+	
+}
+
+$(function(){
+	$("#loginForm").validate({
+		rules:{
+			username:{
+				required: true
+			},
+			password:{
+				required:true
+			}
+		},
+		messages:{
+			username:"请填写用户名",
+			password:"请填写密码"
+		}
+	})
+	$("#registerForm").validate({
+		rules:{
+			username:{
+				required: true
+			},
+			password:{
+				required:true
+			},
+			confirmPassword:{
+				required:true,
+				equalTo:"#new_password" 
+			},
+			telphone:{
+				required:true
+			}
+		},
+		messages:{
+			username:"请填写用户名",
+			password:"请填写密码",
+			confirmPassword:{
+				required:"请确认密码",
+				equalTo:"两次密码输入不一致"
+			},
+			telphone:"请填写移动电话号码"
+		}
+	})
+})

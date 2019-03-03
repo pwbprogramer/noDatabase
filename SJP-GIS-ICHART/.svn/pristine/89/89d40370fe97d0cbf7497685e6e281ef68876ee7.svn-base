@@ -1,0 +1,30 @@
+package com.berheley.ichart.socketIo;
+
+import java.util.Properties;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+
+@Controller
+@RequestMapping(value="/socket")
+public class messagePushController{
+    
+	@ResponseBody
+	@RequestMapping(value="/toSendMessage")
+	public String toSendMessage(HttpServletRequest req){
+		try{
+			Properties poperties = new Properties();
+			poperties.load(messagePushController.class.getClassLoader().getResourceAsStream("projectConfig.properties"));
+			String address = poperties.getProperty("messagePushIpClientAdress")+":"+poperties.getProperty("messagePushIpClientPort");
+//			req.setAttribute("user", this.getCurrentUser().getUsername());
+			req.setAttribute("address", address);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return "/bi-gis/messagePush/messagePush";
+	}
+}

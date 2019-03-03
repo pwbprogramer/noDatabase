@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>iChart登录页面</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<!-- jQuery -->
+<script src="/jquery/jquery-1.12.4.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/login/login.js"></script>
+<style>
+	html,body{width:100%;height:100%;background:#f9fbfd;}
+	
+	/* 模态框样式 */
+	.modal-open .modal{overflow-x: hidden;overflow-y: hidden;}
+	.modal.fade .modal-dialog{position:absolute;top:50%;left:50%;margin:0 auto;-ms-transform:translate(-50%,-50%) scale(.1,.1);transform:translate(-50%,-50%) scale(.1,.1);}
+	.modal.fade .modal-dialog.modal-lg{width:100%;height:100%;}
+	.modal.fade.in .modal-dialog{-ms-transform:translate(-50%,-50%) scale(1,1);transform:translate(-50%,-50%) scale(1,1);}
+	.modal-content{height:100%;border:0;border-radius:0;}
+	.modal-header,.modal-footer{border-width:0;}
+	.modal-header{background-color:#3c8dbc;}
+	.modal-footer{text-align:center;}
+	.modal-body{background:#ecf0f5;}
+	.modal-lg .modal-title{float:left;font-size:24px;color:#ED6C00;}
+	.modal-lg .close{font-size:34px;opacity:1;}
+	.modal-lg .modal-body{height:calc(100% - 64px);overflow:auto;}
+	.modal-lg .modal-body .box [class*='col-']{padding:5px;}
+	.modal-backdrop.in{opacity:0;}
+	
+	.btn-blue{background-color:rgba(0,140,186,.6);}
+	.btn-blue.active,.btn-blue:hover,.btn-blue:active,.btn-blue:focus,.btn-blue:active:focus{color:#fff;background-color: rgba(0,112,149,.6);}
+	.btn-yellow{background-color:rgba(240,138,36,.6);}
+	.btn-yellow.active,.btn-yellow:hover,.btn-yellow:active,.btn-yellow:focus,.btn-yellow:active:focus{color:#fff;background-color: rgba(207,110,14,.6);}
+	
+	.form-clear>[class*="col-"]{min-height:0;padding:0 5px;}
+	.input-clear{color:#fff;border-color:rgba(255, 255, 255, 0.4);background-color: rgba(255, 255, 255, 0.2);}
+	.input-clear:focus{border-color:rgba(255, 255, 255, 0.4);box-shadow:0 0 8px rgba(255, 255, 255, .6);}
+	.input-content [class*="col-"]{padding:10px 5px;}
+	
+	.logo-img,.person-img,.user-img{display:block;margin:0 auto;border-radius:50%;}
+	
+	.chart-content{float:left;width:300px;height:100%;padding:15px;overflow:auto;background:#fff;box-shadow:1px 0 4px rgba(0,0,0,.1);}
+	.chart-content .btn{margin:2px;}
+	
+	.content{float:left;width:calc(100% - 0px);height:100%;}
+	.content-header{position:relative;text-align:center;background:linear-gradient(to right,#465668,#5e6c83);}
+	.nav-tabs{display:inline-block;width:auto;margin:0 auto;border-bottom:0;font-size:16px;}
+	.nav-tabs>li{height:100%;padding-top:15px;}
+	.nav-tabs>li{float:none;display:inline-block;}
+	.nav-tabs>li>a{width:115px;height:55px;padding:10px 25px;margin-right:0;line-height:34px;color:#fff;border:0;}
+	.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{height:100%;margin-right:0;border:0;}
+	.nav-tabs>li.active>a,.nav-tabs>li.active>a:hover,.nav-tabs>li>a:hover,.nav-tabs>li.active>a:focus{background:#fff;color:#7ad3ff;}
+	.content-title{position:absolute;top:0;left:0;padding:15px 15px 0;color:#fff;font-size:18px;line-height:40px;}
+	.personal-img{position:relative;top:-2px;width:40px;height:40px;}
+	.tab-content{height:calc(100% - 70px);padding:15px;overflow:auto;}
+	.pane-item{position:relative;padding: 15px;color:#8492a6;border-radius:8px;box-shadow:0 0 8px rgba(0,0,0,.1);background:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+	.form-horizontal .form-group:last-child{margin-bottom:0;}
+	.user-img-content{width:100%;text-align:center;}
+	.user-img{width:140px;height:140px;margin-bottom:10px;}
+</style>
+<body>
+	<div class="content">
+		<div class="content-header">
+			<div class="content-title hidden-xs">
+				<img class="personal-img" src="http://www.runoob.com/wp-content/uploads/2015/11/foundation-starter@128.png" />
+				<span>个人中心</span>
+			</div>
+			<ul class="nav nav-tabs">
+			    <li class="active"><a data-toggle="tab" href="#myInfo">个人信息</a></li>
+			    <li><a data-toggle="tab" href="#myChart">我的图表</a></li>
+			    <li><a data-toggle="tab" href="#myIdea">意见反馈</a></li>
+			</ul>
+		</div>
+		<div class="tab-content col-md-8 col-md-offset-2">
+		    <div id="myInfo" class="tab-pane in active">
+		    	<div class="pane-item clearfix">
+				    		<div class="user-img-content">
+				    			<img class="user-img" src="http://www.runoob.com/wp-content/uploads/2015/11/foundation-starter@128.png" />
+				    			<button class="btn btn-info btn-sm">上传头像</button>
+				    			<input class="form-control hide" type="file" />
+				    		</div>
+				    		<hr>
+				    		<div class="form-horizontal">
+				    			<div class="form-group">
+				    				<label class="control-label col-sm-4">用户名</label>
+				    				<div class="col-sm-5">
+				    					<input class="form-control" type="text" id="username" />
+				    				</div>
+				    			</div>
+				    			<div class="form-group">
+				    				<label class="control-label col-sm-4">手机号</label>
+				    				<div class="col-sm-5">
+				    					<input class="form-control" type="text" id="phone" />
+				    				</div>
+				    			</div>
+<!-- 				    			<div class="form-group"> -->
+<!-- 				    				<label class="control-label col-sm-4">邮箱</label> -->
+<!-- 				    				<div class="col-sm-5"> -->
+<!-- 				    					<input class="form-control" type="text" /> -->
+<!-- 				    				</div> -->
+<!-- 				    			</div> -->
+				    		</div>
+				    		<hr>
+			    			<div class="text-center">
+			    				<button class="btn btn-warning" onclick="javascript:window.location.href='/';">返回首页</button>
+			    				<button class="btn btn-warning" onclick="logout();">退出登录</button>
+			    			</div>
+		    	</div>
+		    </div>
+		     <div id="myChart" class="tab-pane fade">
+			    <div id="ichartList" class="row">
+				</div>
+		    </div>	
+		    <div id="myIdea" class="tab-pane fade">
+		    	<div class="pane-item clearfix">
+					<div class="form-horizontal">
+				    	<div class="form-group">
+				    		<label class="control-label col-sm-2">你的意见</label>
+				    		<div class="col-sm-9">
+				    			<textarea class="form-control" rows="10" style="resize:none;"></textarea>
+				    		</div>
+				    	</div>	
+				    </div>
+				    <hr>
+			    	<div class="text-center">
+			    		<button class="btn btn-info">提交</button>
+			    	</div>
+				</div>    	
+		    </div>
+		</div>
+	</div>
+	<div class="modal fade" id="templateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog modal-lg">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h4 class="modal-title" id="myModalLabel"></h4>
+	                <div class="pull-right">
+		                <button type="button" class="btn btn-info" onclick="page_user.getEchartLink()">复制链接</button>
+		                <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+	                </div>
+	            </div>
+	            <div class="modal-body" style="">
+            		<div style="width:100%;height:100%" id="ehcartContain"></div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<script type="text/javascript" src="/echart/echarts3/echarts.js"></script>
+	<script type="text/javascript" src="/echart/echarts3/echarts-util.js"></script>
+	<script type="text/javascript" src="/echart/dark.js"></script>
+	<script type="text/javascript">
+		var typeEnum = {};
+		var page_user = {
+			iChartId:"",
+			iChartListData:{},
+			showModal:function(id,type){
+				page_user.iChartId = id;
+				
+				$("#templateModal").modal("show");
+				
+				$('#templateModal').on('shown.bs.modal', function () {
+					var data = page_user.iChartListData[id];
+					$("#myModalLabel").html(JSON.parse(data.options).title)
+					page_user.drawChart(JSON.parse(data.datas),JSON.parse(data.options),"ehcartContain",type);
+				})
+			},
+			drawChart :function(data,options,id,type){
+				var option=null;
+				switch(type){
+					case "barAndLine":
+						option = MyEcharts.EchartsOption.barAndLine(options.title,options.subTitle,data);
+						break;
+					case "pie":
+						option = MyEcharts.EchartsOption.pie(options.title,options.subTitle,data,options.type);
+						break;
+				}
+				MyEcharts.initChart(option,id);
+			},
+			getEchartLink :function(){
+				var link=window.location.host+"/html/bi-gis/tongjiPage/qianzhan/home4.html?id="+page_user.iChartId;
+				var textArea = document.createElement("textarea");
+				textArea.style.position = 'fixed';
+				textArea.style.top = '0';
+				textArea.style.left = '0';
+				textArea.style.width = '2em';
+				textArea.style.height = '2em';
+				textArea.style.padding = '0';
+				textArea.style.border = 'none';
+				textArea.style.outline = 'none';
+				textArea.style.boxShadow = 'none';
+				textArea.style.background = 'transparent';
+				textArea.value = link;
+				var modal = document.getElementById("templateModal");
+				modal.appendChild(textArea);
+				textArea.select();
+				
+				try {
+				  	var successful = document.execCommand('copy');
+				  	var msg = successful ? '成功复制到剪贴板' : '该浏览器不支持点击复制到剪贴板';
+				 	alert(msg);
+				} catch (err) {
+				  	alert('该浏览器不支持点击复制到剪贴板');
+				}
+				modal.removeChild(textArea);
+			}
+		}
+		$(function(){
+			$.ajax({
+				url:"/whetherLogin",
+				type:"get",
+				async:false,
+				success:function(result){
+					if(!result){
+						window.location.href="/";
+					}
+				}
+			})
+			$.ajax({
+				url:"/user/getUser",
+				type:"post",
+				dataType:"json",
+				async:false,
+				data:{},
+				success:function(json){
+					$("#username").val(json.username);
+					$("#username").attr("readonly",true);
+					$("#phone").val(json.telphone);
+					$("#phone").attr("readonly",true);
+				}
+			});
+			$.ajax({
+				url:"/echartsUploadData/getEchartType",
+				type:"post",
+				dataType:"json",
+				async:false,
+				data:{},
+				success:function(json){
+					for(var i=0; i<json.mesg.length;i++){
+						var detail = json.mesg[i].detail;
+						for(var j=0; j<detail.length; j++){
+							typeEnum[detail[j].type] = detail[j].name;
+						}
+					}
+					console.info(typeEnum);
+				}
+			});
+			$.ajax({
+				url:"/echartsUploadData/getIChartList",
+				type:"post",
+				dataType:"json",
+				data:{},
+				success:function(json){
+					var html = "";
+					for(var i=0; i<json.length;i++){
+						var data = json[i];
+						var option = JSON.parse(data.options);
+						var type = option.hasOwnProperty("type")?"pie":"barAndLine";
+				    	html+='<div class="col-sm-4"><div class="pane-item clearfix">';
+						html+='<div onclick="page_user.showModal(\''+data.id+'\',\''+type+'\')">';
+						html+='<div>图表名称：'+option.title+'</div>';
+						html+='<div>图表类型：'+typeEnum[data.type]+'</div>';
+// 						html+='<div>时间</div>';
+						html+='</div></div></div>';
+						page_user.iChartListData[data.id] = data;
+					}
+					$("#ichartList").html(html);
+				}
+			});
+		})
+	</script>
+</body>

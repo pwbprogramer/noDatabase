@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>视频播放页面</title>
+		<meta http-equiv="x-ua-compatible" content="IE=Edge, chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=yes">
+		<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/iconfont/iconfont.css">
+		<script src="/jquery/jquery-1.12.4.min.js"></script>
+		<script src="/bootstrap/js/bootstrap.min.js"></script>
+		<style>
+			.page-content{width:100vw;height:100vh;overflow:auto;background:rgb(240, 240, 240);}
+			.left-content{float:left;width:calc(100% - 376px);height:100%;padding-top:50px;overflow:auto;}
+			.right-content{float:left;width:376px;height:100%;border-left: 1px solid #d8d8d8;background:#fff;}
+			
+			.left-inner{width:880px;margin:0 auto;}
+			.header{margin-bottom:20px;display: flex;flex-direction: row;justify-content: space-between;align-items: center;}
+			.header-text{flex: 1;}
+			.header-btn{padding:10px;cursor: pointer;}
+			.video-content{position:relative;width:100%;height:495px;border-radius: 10px;overflow: hidden;}
+			.video{display:none;width: 100%;height: 100%;}
+			.video-nodeta{width: 100%;height: 100%;}
+			.video-nodeta>img{display:block;width: 100%;height: 100%;border-radius: 10px;}
+			.video-state{position: absolute;bottom: 0;left:0;width:100%;height:30px;padding:0 10px;line-height: 30px;color:#fff;background: rgba(255,255,255,.1);}
+			
+			.nav-tabs{height:44px;padding:0;margin-left:0;list-style:none;line-height:44px;border-bottom: .5px solid #ebebeb;text-align: center;}
+			.nav-tabs>li{float:left;width:33%;margin-bottom:0;text-align:center;}
+			.nav-tabs>li>a{display:inline-block;padding:0;margin-right:0 !important;border:none !important;border-radius: 0 !important;background-color:#fff !important;}
+			.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{color:#ed6c00;border-bottom:2px solid #ed6c00 !important;}
+			.tab-content{height:calc(100% - 45px);padding:20px;overflow: auto;}
+			.btn-orange{color:#fff;border-radius: 22px;border-color: #ed6c00;background-color: #ed6c00;}
+			.btn-orange.btn-lg{padding: 11px 17px;font-size: 16px;font-weight: 600;line-height: 22px;}
+			.btn-orange.btn-sm{font-size:14px;line-height: 12px;}
+			.well{padding: 0;box-shadow:none;}
+			.well-item{display:flex;flex-direction:row;align-items:center;justify-content:center;}
+			.well-item:not(:last-child){border-bottom: 1px solid #dfdfdf;}
+			.well-icon{padding:10px;color:#ddd;font-size: 20px;}
+			.well-text{flex:1;}
+			.note{padding:20px 0;margin:30px;border-radius:8px;box-shadow: 0 0 12px rgba(0,0,0,.1);}
+			.usericon{position:relative;padding:25px 0;margin:50px 0;overflow:hidden;}
+			.usericon:before,.usericon:after{content: '';position: absolute;z-index:1;top:50%;width:20px;height:20px;border-radius: 50%;background: #f5f5f5;transform: translateY(-50%);}
+			.usericon:before{left:-10px;}
+			.usericon:after{right:-10px;}
+			.usericon-img{position:absolute;top:0;left:50%;display:block;width:50px;height:50px;border-radius: 50%;transform: translateX(-50%);}
+			.usericon-line{position:absolute;top:calc(50% - 1px);left:0;width:100%;border-bottom: 2px dotted #ddd;}
+			.kb-list{padding:0;margin:0;list-style: none;}
+			.kb-list>li{padding-bottom:15px;margin-bottom:15px;border-bottom:1px solid #ddd;display: flex;flex-direction: row;align-items: stretch;justify-content: space-between;}
+			.kb-list>li>img{width: 80px;height:80px;border-radius: 4px;}
+			.kb-list>li .content{margin-left:10px;flex:1;display: flex;flex-direction:column;align-items: flex-start;justify-content: space-between;}
+			.kb-list>li .content>.title{font-weight:bold;font-size:16px;}
+		</style>
+	</head>
+	<body>
+		<div class="page-content clearfix">
+			<div class="left-content">
+				<div class="left-inner">
+					<div class="header">
+						<div class="header-text">
+							<div style="font-size: 24px;font-weight: 700;line-height: 32px;">下午好</div>
+							<div style="color: #868688;;">生命中的每一天，都值得全力以赴。</div>
+						</div>
+						<div class="header-btn">退出</div>
+					</div>
+					<div class="video-content">
+						<video class="video"></video>
+						<div class="video-nodeta">
+							<img src="https://res.alphalawyer.cn/icourt-live/20190107/4d5d18dc1a8448b5bbfca11a30b4bd7c" />
+							<div class="video-state">课程直播已结束</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="right-content">
+				<ul class="nav nav-tabs">
+				    <li class="active"><a data-toggle="tab" href="#xq">详情</a></li>
+				    <li><a data-toggle="tab" href="#zl">资料</a></li>
+				    <li><a data-toggle="tab" href="#kb">课表</a></li>
+				</ul>
+				<div class="tab-content">
+					<div id="xq" class="tab-pane fade in active">
+				      <div style="font-weight:bold;font-size: 20px;font-weight: 700;line-height: 26px;">Alpha 案例检索</div>
+				      <div style="color: #868688;font-size: 14px;line-height: 20px;margin-top: 10px;margin-bottom: 16px;">2 月 21 日，19:30 - 21:30</div>
+				      <button class="btn btn-orange btn-block">我要报名</button>
+				      <p style="margin-top:16px;">掌握案例、司法观点和各类法律资源的检索场景、关键词检索方法、高级检索技能、法律检索模板、检索报告制作，数倍提高法律工作效率，提升法律研究能力。</p>
+				      <p style="text-align:center;font-size: 16px;font-weight: 700;margin: 16px 0;">更多精彩尽在法学院APP</p>
+				      <div class="text-center">
+					      <img src="images/ewm.png" alt="" style="height: 110px;width: 110px;">
+				      </div>
+				      <p style="text-align:center;font-size: 14px;margin-top: 8px;">请扫描二维码下载</p>
+				    </div>
+					<div id="zl" class="tab-pane fade">
+				      <div class="well">
+				      	<div class="well-item">
+				      		<div class="well-icon"><i class="glyphicon glyphicon-file"></i></div>
+				      		<div class="well-text">没有系统学过法律检索怎么办？ | iCourt </div>
+				      		<div class="well-icon"><i class="glyphicon glyphicon-chevron-right"></i></div>
+				      	</div>
+				      	<div class="well-item">
+				      		<div class="well-icon"><i class="glyphicon glyphicon-file"></i></div>
+				      		<div class="well-text">没有系统学过法律检索怎么办？ | iCourt </div>
+				      		<div class="well-icon"><i class="glyphicon glyphicon-chevron-right"></i></div>
+				      	</div>
+				      </div>
+				      <div class="note">
+				      	<div style="text-align:center;">更多资料&nbsp;扫码联系</div>
+				      	<div class="usericon">
+				      		<img class="usericon-img" src="images/ewm.png" alt="">
+				      		<div class="usericon-line"></div>
+				      	</div>
+				      	<div style="text-align:center;font-size: 16px;font-weight: bold;">宇佳</div>
+				      	<div style="margin-top:5px;margin-bottom:20px;text-align:center;font-size: 14px;color:#ddd;">微信号</div>
+				      	<div class="text-center">
+					      <img src="images/ewm.png" alt="" style="height: 80px;width: 80px;">
+				      	</div>
+				      </div>
+				    </div>
+					<div id="kb" class="tab-pane fade">
+				      	<ul class="kb-list">
+				      		<li>
+				      			<img src="https://res.alphalawyer.cn/icourt-live/20181215/c5de190ce05948be95efa6c1164d2893" />
+				      			<div class="content">
+				      				<div class="title">iCourt 橙色星期三</div>
+				      				<div>
+				      					<span>2 月 20 日，19:00 - 20:30</span>
+				      					<button class="btn btn-orange btn-sm">报名</button>
+				      				</div>
+				      			</div>
+				      		</li>
+				      		<li>
+				      			<img src="https://res.alphalawyer.cn/icourt-live/20181215/c5de190ce05948be95efa6c1164d2893" />
+				      			<div class="content">
+				      				<div class="title">iCourt 橙色星期三</div>
+				      				<div>
+				      					<span>2 月 20 日，19:00 - 20:30</span>
+				      					<button class="btn btn-orange btn-sm">报名</button>
+				      				</div>
+				      			</div>
+				      		</li>
+				      	</ul>
+				    </div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

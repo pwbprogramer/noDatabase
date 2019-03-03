@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>videoDesktop</title>
+    <script src="/js/video/videoDesktop/example_d/libs/jquery-2.1.1.min.js"></script>
+    <script src="/js/video/videoDesktop/example_d/libs/strophe/strophe.js"></script>
+    <script src="/js/video/videoDesktop/example_d/libs/strophe/strophe.disco.min.js?v=1"></script>
+    <script src="https://meet.jit.si/libs/lib-jitsi-meet.min.js"></script>
+    <script src="/js/video/videoDesktop/example_d/example.js" ></script>
+    <style type="text/css">
+    	video{
+    		width:1200px;
+    	}
+    </style>
+</head>
+<body>
+    <!-- <a href="#" onclick="unload()">Unload</a>
+    <a href="#" onclick="switchVideo()">switchVideo</a>
+    <div id="audioOutputSelectWrapper" style="display: none;">
+        Change audio output device
+        <select id="audioOutputSelect" onchange="changeAudioOutput(this)"></select>
+    </div>-->
+    <!-- <video id="localVideo" autoplay="true"></video> -->
+    <!--<audio id="localAudio" autoplay="true" muted="true"></audio>-->
+<!--     <button type="button" onclick="closeDesktop()">Exit</button> -->
+</body>
+</html>

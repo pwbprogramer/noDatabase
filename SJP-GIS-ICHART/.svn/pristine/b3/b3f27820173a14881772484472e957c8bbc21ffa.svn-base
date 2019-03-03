@@ -1,0 +1,76 @@
+package com.berheley.ichart.socketIo;
+
+import java.net.InetAddress;
+import java.util.Properties;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.corundumstudio.socketio.Configuration;
+import com.corundumstudio.socketio.SocketConfig;
+import com.corundumstudio.socketio.SocketIOServer;
+
+
+@Component
+public class SocketIOServerStart {
+	  
+	  @Autowired
+      private EventListenner EventListenner; 
+	  
+	  @Autowired
+      private static SocketIOClientCache SocketIOClientCache; 
+	  
+	  public static SocketIOServer currentSocketIOServer;
+	  
+	  private Logger logger = LogManager.getLogger(getClass().getName());
+	
+	  /**
+	   * 创建socketIOServer
+	   * @param host(IP/domainDame)
+	   * @param port
+	   * @return
+	   */
+	  public SocketIOServer getServer(String host,int port) throws Exception{
+		  SocketIOServer socketIOServer = null;
+		  Configuration configuration = new Configuration();
+		  configuration.setHostname(InetAddress.getByName(host).getHostAddress());
+		  configuration.setPort(port);
+		  configuration.setPingInterval(5000);
+		  configuration.setPingTimeout(3000);
+		  configuration.setWorkerThreads(100);
+		  SocketConfig socketConfig = new SocketConfig();
+	      socketConfig.setReuseAddress(true);
+	      configuration.setSocketConfig(socketConfig);
+		  socketIOServer = new SocketIOServer(configuration);
+		  return socketIOServer;
+	  }
+	  
+	  @PostConstruct
+	  public void startSocketIOServer(){
+		  
+		  try{
+			  Properties poperties = new Properties();
+			  poperties.load(SocketIOServerStart.class.getClassLoader().getResourceAsStream("projectConfig.properties"));
+			  String ip = poperties.getProperty("messagePushIpServerAdress");
+			  int port = Integer.parseInt(poperties.getProperty("messagePushIpServerPort"));
+			  SocketIOServer socketIOServer = this.getServer(ip, port);
+			  currentSocketIOServer = socketIOServer;
+			  socketIOServer.addListeners(EventListenner);
+			  logger.info("消息推送服务正常启动");
+			  socketIOServer.start();
+		  }catch(Exception e){
+			  logger.error(e.getMessage());
+		  }
+	  }
+	  
+	  @PreDestroy
+	  public void stopSocketIOServer(){
+		   currentSocketIOServer.stop();
+		   logger.info("关闭消息推送服务");
+	  }
+}

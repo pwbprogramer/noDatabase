@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.berheley</groupId>
+	<artifactId>SJP-GIS-ICHART</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>SJP-GIS-ICHART</name>
+	<description>Echarts project for Spring Boot</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.4.3.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+
+		<thymeleaf.version>3.0.2.RELEASE</thymeleaf.version>
+		<thymeleaf-layout-dialect.version>2.1.1</thymeleaf-layout-dialect.version>
+
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-hateoas</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.mobile</groupId>
+			<artifactId>spring-mobile-device</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka</artifactId>
+			<version>1.4.3.RELEASE</version>
+		</dependency>
+		<dependency>  
+		    <groupId>org.apache.httpcomponents</groupId>  
+		    <artifactId>httpcore</artifactId>  
+		    <version>4.4.6</version>  
+		</dependency>  
+		<dependency>  
+		    <groupId>org.apache.httpcomponents</groupId>  
+		    <artifactId>httpclient</artifactId>  
+		    <version>4.5.3</version>  
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		 </dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>3.3.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>angularjs</artifactId>
+			<version>1.5.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>angular-ui-router</artifactId>
+			<version>0.2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-excelant</artifactId>
+			<version>3.16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>3.16</version>
+		</dependency>
+		<dependency>
+			<groupId> org.apache.cassandra</groupId>
+			<artifactId>cassandra-all</artifactId>
+			<version>0.8.1</version>
+
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+			</exclusions>
+
+		</dependency>
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.3</version>
+			<classifier>jdk15</classifier><!--指定jdk版本 -->
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Camden.SR3</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+			  <groupId>com.berheley.commons</groupId>
+			  <artifactId>bhl-commons</artifactId>
+			  <version>1.1.0</version>
+			  <type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			
+			<!-- <plugin>  
+	            <groupId>org.apache.maven.plugins</groupId>  
+	            <artifactId>maven-assembly-plugin</artifactId>  
+	            <version>2.5.5</version>  
+	            <configuration>  
+	                <archive>  
+	                    <manifest>  
+	                        <mainClass>com.berheley.phone.BerheleyPhoneApplication</mainClass>  
+	                    </manifest>  
+	                </archive>  
+	                <descriptorRefs>  
+	                    <descriptorRef>jar-with-dependencies</descriptorRef>  
+	                </descriptorRefs>  
+	            </configuration>  
+	            <executions>  
+	                <execution>  
+	                    <id>make-assembly</id>  
+	                    <phase>package</phase>  
+	                    <goals>  
+	                        <goal>single</goal>  
+	                    </goals>  
+	                </execution>  
+	            </executions>
+	        </plugin> --> 
+	        
+	        <plugin>  
+	            <groupId>org.apache.maven.plugins</groupId>  
+	            <artifactId>maven-jar-plugin</artifactId>  
+	            <version>2.6</version>  
+	            <configuration>  
+	                <archive>  
+	                    <manifest>  
+	                        <addClasspath>true</addClasspath>  
+	                        <classpathPrefix>lib/</classpathPrefix>  
+	                        <mainClass>com.berheley.phone.BerheleyPhoneApplication</mainClass>  
+	                    </manifest>  
+	                </archive>  
+	            </configuration>  
+	        </plugin>  
+	        <plugin>  
+	            <groupId>org.apache.maven.plugins</groupId>  
+	            <artifactId>maven-dependency-plugin</artifactId>  
+	            <version>2.10</version>  
+	            <executions>  
+	                <execution>  
+	                    <id>copy-dependencies</id>  
+	                    <phase>package</phase>  
+	                    <goals>  
+	                        <goal>copy-dependencies</goal>  
+	                    </goals>  
+	                    <configuration>  
+	                        <outputDirectory>${project.build.directory}/lib</outputDirectory>  
+	                    </configuration>  
+	                </execution>  
+	            </executions>  
+	        </plugin> 
+	        
+		</plugins>
+		<defaultGoal>compile</defaultGoal>
+		<finalName>autoremind</finalName>
+	</build>
+
+</project>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>videoSee</title>
+    <script src="/js/video/videoDesktop/example_d/libs/jquery-2.1.1.min.js"></script>
+    <script src="/js/video/videoDesktop/example_d/libs/strophe/strophe.js"></script>
+    <script src="/js/video/videoDesktop/example_d/libs/strophe/strophe.disco.min.js?v=1"></script>
+    <script src="https://meet.jit.si/libs/lib-jitsi-meet.min.js"></script>
+    <script src="/js/video/exampleSee.js" ></script>
+    <style type="text/css">
+    	#localVideoD{
+    		width:100%;
+    		height:100%
+    	}
+    	#localVideoV{
+    		width:200px;
+    	}
+    	
+    </style>
+</head>
+<body>
+    <!-- <a href="#" onclick="unload()">Unload</a>
+    <a href="#" onclick="switchVideo()">switchVideo</a>
+    <div id="audioOutputSelectWrapper" style="display: none;">
+        Change audio output device
+        <select id="audioOutputSelect" onchange="changeAudioOutput(this)"></select>
+    </div>-->
+    <video autoplay="1" id="localVideoD"></video>
+    <div style="position:fixed;right: 0px;bottom: 20px;">
+    	<video autoplay="1" id="localVideoV"></video>
+    </div>
+    <!--<audio id="localAudio" autoplay="true" muted="true"></audio>-->
+<!--     <button type="button" onclick="closeDesktop()">Exit</button> -->
+</body>
+</html>

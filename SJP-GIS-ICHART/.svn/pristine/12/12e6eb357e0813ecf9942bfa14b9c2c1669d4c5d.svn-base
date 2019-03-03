@@ -1,0 +1,28 @@
+package com.berheley.ichart.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.berheley.ichart.domain.User;
+import com.berheley.ichart.service.impl.UserServiceImpl;
+
+import net.sf.json.JSONObject;
+
+@Controller
+@RequestMapping(value="/user")
+public class UserController {
+
+	@Autowired
+	private UserServiceImpl userServiceImpl;
+	
+	@ResponseBody
+	@RequestMapping(value="/getUser")
+	public JSONObject getUser() {
+		User user = (User) userServiceImpl.currentSession.getAttribute("loginUser");
+		JSONObject jsonObject  = JSONObject.fromObject(user);
+		return jsonObject;
+	}
+	
+}

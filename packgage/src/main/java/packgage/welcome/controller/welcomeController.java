@@ -1,5 +1,7 @@
 package packgage.welcome.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,6 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class welcomeController {
+	
+	@Autowired
+	public RedisTemplate redisTemplate;
      
 	@RequestMapping(value = "/welcomePage")
 	public ModelAndView welcomePage() {
@@ -20,6 +25,9 @@ public class welcomeController {
 	
 	@RequestMapping(value = "/admin")
 	public ModelAndView adminPage() {
+		System.out.println(redisTemplate.getConnectionFactory());
+//		redisTemplate.opsForValue().set("name", "pingweibo");
+		System.out.println(redisTemplate.opsForValue().get("name"));
 		ModelAndView model = new ModelAndView();
 		model.addObject("title", "Spring Security Hello World");
 		model.addObject("message", "This is protected page!");

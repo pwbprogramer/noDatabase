@@ -1,0 +1,53 @@
+package com.berheley.ichart.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class HomeController {
+
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String loginPage() {
+		return "index";
+	}
+	
+	@RequestMapping(value="/userCenter")
+	public String userCenter() {
+		return  "user";
+	}
+	
+	@RequestMapping(value="/videoLive")
+	public String videoLive(){
+		return "/video/live/videoLiveIndex";
+	}
+	@RequestMapping(value="videoLiveDesktop")
+	public String videoLiveDesktop(){
+		return "/video/live/videoLiveDesktop";
+	}
+	@RequestMapping(value="/videoLiveCamera")
+	public String videoLiveCamera(){
+		return "/video/live/videoLiveCamera";
+	}
+	
+	
+	@RequestMapping(value="/videoWatch")
+	public ModelAndView videoWatch(@RequestParam(name="Vid",required=true) String vid,@RequestParam(name="Did",required=true) String did) {
+		ModelAndView mv=new ModelAndView();
+		mv.setViewName("/video/watch/videoWatchIndex");
+		mv.addObject("did", did);
+		mv.addObject("vid", vid);
+		return mv;
+	}
+	@RequestMapping(value="videoWatchDesktop")
+	public String videoWatchDesktop(){
+		return "/video/watch/videoWatchDesktop";
+	}
+	@RequestMapping(value="/videoWatchCamera")
+	public String videoWatchCamera(){
+		return "/video/watch/videoWatchCamera";
+	}
+}

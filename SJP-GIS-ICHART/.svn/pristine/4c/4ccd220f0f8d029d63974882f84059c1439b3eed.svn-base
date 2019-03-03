@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>socketIo</title>
+<script type="text/javascript" src="/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/js/socketIo/socket.io.js"></script>
+<script type="text/javascript">
+
+var  messagePush = (function(){
+	
+	var fromClient = "ping2";
+	
+	var address;
+	
+	var toClient = "ping1";
+	
+	var content = "测试socketIo";
+	
+	var socket;
+	
+	var initSocketIoClient = function(){
+		$.ajax({
+			url:"/socket/getServerAddress",
+			type:"get",
+			success:function(result){
+				address = result;
+				connect();
+			}
+		})
+	};
+	
+	var connect = function(){
+		socket = io.connect("ws://"+address+"?user="+fromClient);
+		socket.on("connecting",function(){
+			console.info("正在连接");
+		});
+		socket.on("connect",function(){
+			console.info("连接成功");
+		});
+		socket.on("sendMessage",function(data){
+			console.info(data);
+			console.info("收到一条消息");
+		});
+		socket.on('disconnect', function() {
+		    console.info("与服务其断开");
+		});
+		socket.on('reconnect', function() {
+		    console.info("与服务成功重连");
+		});
+		socket.on('reconnecting', function() {
+		    console.info("与服务正在重连");
+		});
+	};
+	
+	var sendMessage = function(){
+        var param = {
+        	fromClient:fromClient,
+        	toClient:toClient,
+        	content:content
+        }
+		socket.emit("sendMessage",param);
+	};
+	
+	return {
+		sendMessage:sendMessage,
+		initSocketIoClient:initSocketIoClient
+	}
+})();
+$(function(){
+	messagePush.initSocketIoClient();
+})
+</script>
+</head>
+<body>
+<button type="button" onclick="messagePush.sendMessage()">发送</button>
+</body>
+</html>

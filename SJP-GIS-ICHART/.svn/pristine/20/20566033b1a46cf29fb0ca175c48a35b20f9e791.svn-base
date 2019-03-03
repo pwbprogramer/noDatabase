@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>iChart登录页面</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/iconfont/iconfont.css">
+<!-- jQuery -->
+<script src="/jquery/jquery-1.12.4.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<style>
+	html,body{width:100%;height:100%;background:#f9fbfd;}
+	.modal-open .modal{overflow-x: hidden;overflow-y: hidden;}
+	.modal.fade .modal-dialog{position:absolute;top:50%;left:50%;width:100%;height:100%;margin:0 auto;-ms-transform:translate(-50%,-50%) scale(.1,.1);transform:translate(-50%,-50%) scale(.1,.1);}
+	.modal.fade .modal-dialog.modal-sm{width:40%;height:auto;}
+	.modal.fade.in .modal-dialog{-ms-transform:translate(-50%,-50%) scale(1,1);transform:translate(-50%,-50%) scale(1,1);}
+	.modal-content{height:100%;color:#fff;border:0;background-color: rgba(0, 0, 0, .8);box-shadow:0 0 10px rgba(255,255,255,.4);}
+	.modal-header,.modal-body,.modal-footer{padding:10px;}
+	.modal-header{border-bottom-color:rgba(255, 255, 255, 0.4);}
+	.modal-footer{text-align:center;border-top-color:rgba(255, 255, 255, 0.4);}
+	.modal-header .close{font-size:24px;color:#fff;opacity:1;}
+	.modal-header .close:hover{color:#fff;opacity:.8;}
+	.modal-body{height:calc(100% - 100px);overflow:auto;}
+	.modal-backdrop.in{opacity:.7;}
+	
+	.btn-blue{background-color:rgba(0,140,186,.6);}
+	.btn-blue.active,.btn-blue:hover,.btn-blue:active,.btn-blue:focus,.btn-blue:active:focus{color:#fff;background-color: rgba(0,112,149,.6);}
+	.btn-yellow{background-color:rgba(240,138,36,.6);}
+	.btn-yellow.active,.btn-yellow:hover,.btn-yellow:active,.btn-yellow:focus,.btn-yellow:active:focus{color:#fff;background-color: rgba(207,110,14,.6);}
+	
+	.form-clear>[class*="col-"]{min-height:0;padding:0 5px;}
+	.input-clear{color:#fff;border-color:rgba(255, 255, 255, 0.4);background-color: rgba(255, 255, 255, 0.2);}
+	.input-clear:focus{border-color:rgba(255, 255, 255, 0.4);box-shadow:0 0 8px rgba(255, 255, 255, .6);}
+	.input-content [class*="col-"]{padding:10px 5px;}
+	
+	.logo-img,.person-img,.user-img{display:block;margin:0 auto;border-radius:50%;}
+	
+	.aside{position:relative;float:left;width:100px;height:100%;padding:10px;font-size:18px;color:#8492a6;box-shadow:1px 0 4px rgba(0,0,0,.06);background:#fff;}
+	.img-content{width:100%;height:80px;overflow:hidden;}	
+	.logo-img,.person-img{width:75px;height:75px;}
+	.person-img{margin-bottom:5px;}
+	.aside-list{padding:0;margin:10px 0;list-style:none;}
+	.aside-list li{cursor:pointer;s}
+	.aside-list li:hover{color:#465668;}
+	.aside-list .iconfont{position:relative;top:1px;margin-right:3px;font-size:20px;}
+	.aside-list li{display:block;text-align:center;}
+	.person-content{position:absolute;bottom:0;left:0;width:100%;padding:10px ;text-align:center;}
+	
+	.chart-content{float:left;width:300px;height:100%;padding:15px;overflow:auto;background:#fff;box-shadow:1px 0 4px rgba(0,0,0,.1);}
+	.chart-content .btn{margin:2px;}
+	
+	.content{float:left;width:calc(100% - 0px);height:100%;}
+	.content-header{position:relative;text-align:center;background:linear-gradient(to right,#465668,#5e6c83);}
+	.nav-tabs{display:inline-block;width:auto;margin:0 auto;border-bottom:0;font-size:16px;}
+	.nav-tabs>li{height:100%;padding-top:15px;}
+	.nav-tabs>li{float:none;display:inline-block;}
+	.nav-tabs>li>a{width:115px;height:55px;padding:10px 25px;margin-right:0;line-height:34px;color:#fff;border:0;}
+	.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{height:100%;margin-right:0;border:0;}
+	.nav-tabs>li.active>a,.nav-tabs>li.active>a:hover,.nav-tabs>li>a:hover,.nav-tabs>li.active>a:focus{background:#fff;color:#7ad3ff;}
+	.content-title{position:absolute;top:0;left:0;padding:15px 15px 0;color:#fff;font-size:18px;line-height:40px;}
+	.personal-img{position:relative;top:-2px;width:40px;height:40px;}
+	.tab-content{height:calc(100% - 70px);padding:15px;overflow:auto;}
+	.pane-item{position:relative;padding: 15px;color:#8492a6;border-radius:8px;box-shadow:0 0 8px rgba(0,0,0,.1);background:#fff;}
+	.form-horizontal .form-group:last-child{margin-bottom:0;}
+	.user-img-content{width:100%;text-align:center;}
+	.user-img{width:140px;height:140px;margin-bottom:10px;}
+</style>
+<body>
+<!-- 	<div class="aside hide">
+		<div class="img-content">
+			<img class="logo-img" src="http://www.runoob.com/wp-content/uploads/2015/11/foundation-starter@128.png" />
+		</div>	
+		<ul class="aside-list">
+			<li>
+				<i class="iconfont icon-chart-bar"></i>
+				<span>图表</span>
+			</li>
+		</ul>
+		<div class="person-content">
+			<div class="img-content">
+				<img class="person-img" src="http://www.runoob.com/wp-content/uploads/2015/11/foundation-starter@128.png" />
+			</div>
+			<span class="person-name">张张</span>
+		</div>
+	</div>
+	<div class="chart-content hide">
+		<button class="btn btn-success" data-toggle="modal" data-target="#templateModal">柱线图</button>
+		<button class="btn btn-success">柱线图</button>
+		<button class="btn btn-success">柱线图</button>
+	</div> -->
+	<div class="content">
+		<div class="content-header">
+			<div class="content-title hidden-xs">
+				<img class="personal-img" src="http://www.runoob.com/wp-content/uploads/2015/11/foundation-starter@128.png" />
+				<span>个人中心</span>
+			</div>
+			<ul class="nav nav-tabs">
+			    <li class="active"><a data-toggle="tab" href="#myInfo">个人信息</a></li>
+			    <li><a data-toggle="tab" href="#myChart">我的图表</a></li>
+			    <li><a data-toggle="tab" href="#myIdea">意见反馈</a></li>
+			</ul>
+		</div>
+		<div class="tab-content col-md-8 col-md-offset-2">
+		    <div id="myInfo" class="tab-pane in active">
+		    	<div class="pane-item clearfix">
+				    		<div class="user-img-content">
+				    			<img class="user-img" src="http://www.runoob.com/wp-content/uploads/2015/11/foundation-starter@128.png" />
+				    			<button class="btn btn-info btn-sm">上传头像</button>
+				    			<input class="form-control hide" type="file" />
+				    		</div>
+				    		<hr>
+				    		<div class="form-horizontal">
+				    			<div class="form-group">
+				    				<label class="control-label col-sm-4">用户名</label>
+				    				<div class="col-sm-5">
+				    					<input class="form-control" type="text" />
+				    				</div>
+				    			</div>
+				    			<div class="form-group">
+				    				<label class="control-label col-sm-4">登录密码</label>
+				    				<div class="col-sm-5">
+				    					<input class="form-control" type="text" />
+				    				</div>
+				    			</div>
+				    			<div class="form-group">
+				    				<label class="control-label col-sm-4">手机号</label>
+				    				<div class="col-sm-5">
+				    					<input class="form-control" type="text" />
+				    				</div>
+				    			</div>
+				    			<div class="form-group">
+				    				<label class="control-label col-sm-4">邮箱</label>
+				    				<div class="col-sm-5">
+				    					<input class="form-control" type="text" />
+				    				</div>
+				    			</div>
+				    		</div>
+				    		<hr>
+			    			<div class="text-center">
+			    				<button class="btn btn-warning">退出登录</button>
+			    			</div>
+		    	</div>
+		    </div>
+		     <div id="myChart" class="tab-pane fade">
+		     	<div class="col-md-3">
+			    	<div class="pane-item clearfix">
+			    		<div class="" data-toggle="modal" data-target="#templateModal">
+			    			<div>类型</div>
+			    			<div>标题</div>
+			    			<div>时间</div>
+			    		</div>
+			    	</div>
+		     	</div>
+		    </div>	
+		    <div id="myIdea" class="tab-pane fade">
+		    	<div class="pane-item clearfix">
+					<div class="form-horizontal">
+				    	<div class="form-group">
+				    		<label class="control-label col-sm-2">你的意见</label>
+				    		<div class="col-sm-9">
+				    			<textarea class="form-control" rows="10" style="resize:none;"></textarea>
+				    		</div>
+				    	</div>	
+				    </div>
+				    <hr>
+			    	<div class="text-center">
+			    		<button class="btn btn-info">提交</button>
+			    	</div>
+				</div>    	
+		    </div>
+		</div>
+	</div>
+	<div class="modal fade" id="templateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                <h4 class="modal-title" id="myModalLabel">模板</h4>
+	            </div>
+	            <div class="modal-body" style="height:calc(100% - 101px);padding:0;">
+		            <div class="form-clear clearfix" style="height:100%">
+			            <div class="col-sm-4 input-content" id="inputMesg" style="height:100%;overflow:auto;">
+				            <div class="col-sm-4">
+				           		<label class="control-label">标题</label>
+				           		<input type="text" value="" class="form-control input-sm input-clear">
+			            	</div>
+				            <div class="col-sm-4">
+				           		<label class="control-label">标题</label>
+				           		<input type="text" value="" class="form-control input-sm input-clear">
+			            	</div>
+				            <div class="col-sm-4">
+				           		<label class="control-label">标题</label>
+				           		<input type="text" value="" class="form-control input-sm input-clear">
+			            	</div>
+			            </div>	
+			            <div class="col-sm-8" style="height:100%;padding:10px 8px 10px 10px;">
+			            	<div style="height:100%;" id="startEchart"></div>
+			            </div>
+		            </div>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-blue">修改</button>
+	                <button type="button" class="btn btn-yellow" data-dismiss="modal" id="">保存</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</body>

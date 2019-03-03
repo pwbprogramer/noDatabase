@@ -1,0 +1,14 @@
+package com.berheley.ichart.socketIo;
+
+import org.springframework.stereotype.Component;
+
+import com.corundumstudio.socketio.SocketIOClient;
+
+@Component
+public class SocketIOResponse {
+	
+	 public void sendEvent(SocketIOClient client, String event, TMessageBean messageBean) {
+	        client.sendEvent(event, messageBean);
+	 }
+
+}

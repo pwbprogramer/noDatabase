@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>iChart</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<!-- jQuery -->
+<script src="/jquery/jquery-1.12.4.min.js"></script>
+<script src="/jquery/jquery.form.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<style>
+	html,body{width:100%;height:100%;overflow:hidden;}
+	
+	.color-ED6C00{color:#ED6C00}
+	.about-content p{font-size:18px;}
+	.square-list{position:fixed;top:0;left:0;width:100%;height:100%;padding:0;margin:0;list-style:none;}
+	.square-list li{position:absolute;display:block;bottom:-160px;color:rgba(255, 255, 255, 0.2);transition:all .4s;}
+	.square-list li:hover{color:rgba(255, 255, 255, 0.4);-ms-transform:scale(1.1,1.1);transform:scale(1.1,1.1);}
+	.square-list li:nth-child(1){left:5%;animation:square 18s linear infinite;}
+	.square-list li:nth-child(1) .iconfont{font-size:120px;}
+	.square-list li:nth-child(2){left:15%;animation:square 18s 2s linear infinite;}
+	.square-list li:nth-child(2) .iconfont{font-size:100px;}
+	.square-list li:nth-child(3){left:25%;animation:square 16s 10s linear infinite;}
+	.square-list li:nth-child(3) .iconfont{font-size:80px;}
+	.square-list li:nth-child(4){left:40%;animation:square 20s 2s linear infinite;}
+	.square-list li:nth-child(4) .iconfont{font-size:60px;}
+	.square-list li:nth-child(5){left:50%;animation:square 14s 16s linear infinite;}
+	.square-list li:nth-child(5) .iconfont{font-size:140px;}
+	.square-list li:nth-child(6){left:60%;animation:square 18s .5s linear infinite;}
+	.square-list li:nth-child(6) .iconfont{font-size:80px;}
+	.square-list li:nth-child(7){left:70%;animation:square 16s 18s linear infinite;}
+	.square-list li:nth-child(7) .iconfont{font-size:100px;}
+	.square-list li:nth-child(8){left:75%;animation:square 20s 6s linear infinite;}
+	.square-list li:nth-child(8) .iconfont{font-size:140px;}
+	.square-list li:nth-child(9){left:85%;animation:square 16s 16s linear infinite;}
+	.square-list li:nth-child(9) .iconfont{font-size:60px;}
+	.square-list li:nth-child(10){left:95%;animation:square 22s 2s linear infinite;}
+	.square-list li:nth-child(10) .iconfont{font-size:80px;}
+	@keyframes square{
+		from{bottom:-160px;}
+		to{bottom:100%;}
+	}
+	.header{position:relative;margin:0 auto;width:80%;}
+	.header-title{font-size:36px;line-height:100px;color:#ED6C00;}
+	.header-list{padding:0;margin:36px 0 0 0;list-style:none;line-height:30px;font-size:18px;color:#fff;}
+	.header-list li{display:inline-block;padding:0 5px;margin-left:10px;border-bottom:2px solid rgba(255,255,255,0);cursor:pointer;transition:all .2s;}
+	.header-list li:hover{border-bottom-color:rgba(255,255,255,1);}
+	.main{position:fixed;top:50%;left:50%;width:100%;-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);}
+	.main-title{white-space:nowrap;letter-spacing: .2em;font-size:28px;color:#fff;text-align:center;margin-bottom:20px;text-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);}
+	.btn-content .btn-clear{width:250px;margin:0 auto 30px;}
+	
+	.btn{transition-duration: 0.25s;}
+	.btn-clearblue{background-color:rgba(160,1211,232,.4);}
+	.btn-clearblue.active,.btn-clearblue:hover,.btn-clearblue:active,.btn-clearblue:focus,.btn-clearblue:active:focus{color:#fff;background-color: rgba(160,1211,232,.3);}
+	.btn-blue{background-color:rgba(0,140,186,.6);}
+	.btn-blue.active,.btn-blue:hover,.btn-blue:active,.btn-blue:focus,.btn-blue:active:focus{color:#fff;background-color: rgba(0,112,149,.6);}
+	.btn-yellow{background-color:rgba(240,138,36,.6);}
+	.btn-yellow.active,.btn-yellow:hover,.btn-yellow:active,.btn-yellow:focus,.btn-yellow:active:focus{color:#fff;background-color: rgba(207,110,14,.6);}
+	.btn-clear{outline: 0;border: 1px solid rgba(255, 255, 255, 0.4);background-color: rgba(255, 255, 255, 0.2);border-radius: 3px;color: white;}
+	.btn-clear.active,.btn-clear:hover,.btn-clear:active,.btn-clear:focus,.btn-clear:active:focus{color:#fff;border-color:#fff;outline:none !important;box-shadow:none;background-color: rgba(255, 255, 255, 0.4);}
+	.btn-clear.no-allow{opacity:.3;border-color:rgba(255, 255, 255, 0.4) !important;background-color: rgba(255, 255, 255, 0.2) !important;cursor: default;}
+	
+	.panel-clear{color:#fff;border: 1px solid rgba(255, 255, 255, 0.4);background-color: rgba(255, 255, 255, 0.2);}
+	.panel-title{line-height:28px;}
+	
+	.modal-open .modal{overflow-x: hidden;overflow-y: hidden;}
+	.modal.fade .modal-dialog{position:absolute;top:50%;left:50%;width:100%;height:100%;margin:0 auto;-ms-transform:translate(-50%,-50%) scale(.1,.1);transform:translate(-50%,-50%) scale(.1,.1);}
+	.modal.fade .modal-dialog.modal-sm{width:40%;height:auto;}
+	.modal.fade.in .modal-dialog{-ms-transform:translate(-50%,-50%) scale(1,1);transform:translate(-50%,-50%) scale(1,1);}
+	.modal-content{height:100%;color:#fff;border:0;background-color: rgba(0, 0, 0, .8);box-shadow:0 0 10px rgba(255,255,255,.4);}
+	.modal-header,.modal-body,.modal-footer{padding:10px;}
+	.modal-header{border-bottom-color:rgba(255, 255, 255, 0.4);}
+	.modal-footer{text-align:center;border-top-color:rgba(255, 255, 255, 0.4);}
+	.modal-header .close{font-size:24px;color:#fff;opacity:1;}
+	.modal-header .close:hover{color:#fff;opacity:.8;}
+	.modal-body{height:calc(100% - 100px);overflow:auto;}
+	.modal-backdrop.in{opacity:.7;}
+	
+	.table-content{height:130px;padding:10px;overflow:auto;}
+	.form-clear{height:calc(100% - 130px);overflow:auto;}
+	.table-clear{background:none;}
+	.table-clear{margin-bottom:0;}
+	.table-clear>thead>tr>th,.table-clear>tbody>tr>td{vertical-align:middle;}
+	.table-clear>tbody>tr>td{border-top:0;}
+	.table-clear>tbody>tr>td:first-child{width:5%;white-space:nowrap;}
+	.table-clear>tbody>tr>td .btn{margin:4px 2px;}
+	.valueTable-content{border-radius:4px;border:1px solid rgba(255, 255, 255, 0.4);}
+	.table-title{padding:10px;border-bottom:1px solid rgba(255, 255, 255, 0.4);text-align:right;background-color: rgba(255, 255, 255, 0);}
+	.chartname{line-height:36px;}
+	.chartname .iconfont{position:relative;top:1px;margin-right:5px;}
+	.form-clear{padding:0;border-top:1px solid rgba(255, 255, 255, 0.4);}
+	.form-clear>[class*="col-"]{min-height:0;padding:0 5px;}
+	.input-content [class*="col-"]{padding:10px 5px;}
+	.input-clear{color:#fff;border-color:rgba(255, 255, 255, 0.4);background-color: rgba(255, 255, 255, 0.2);}
+	.input-clear:focus{border-color:rgba(255, 255, 255, 0.4);box-shadow:0 0 8px rgba(255, 255, 255, .6);}
+	.tooltip-inner{
+		font-size:16px;
+		letter-spacing:.2em;
+		background:rgba(255, 255, 255, 0.4);
+	}
+	.tooltip.right .tooltip-arrow{
+		border-right-color:rgba(255, 255, 255, 0.4);
+	}
+</style>
+</head>
+<body>
+	<img style="position:fixed;top:0;left:0;width:100%;height:auto;min-height:100%;" src="/images/chart.jpg" />
+	<ul class="square-list">
+		<li><i class="iconfont icon-chartpie"></i></li>
+		<li><i class="iconfont icon-concentricpiechart"></i></li>
+		<li><i class="iconfont icon-oiltablechart"></i></li>
+		<li><i class="iconfont icon-chart-bubble"></i></li>
+		<li><i class="iconfont icon-radarchart"></i></li>
+		<li><i class="iconfont icon-chart-"></i></li>
+		<li><i class="iconfont icon-chart-area"></i></li>
+		<li><i class="iconfont icon-chart-bar"></i></li>
+		<li><i class="iconfont icon-chartpie"></i></li>
+		<li><i class="iconfont icon-chart-line"></i></li>
+	</ul>
+	<div class="header clearfix">
+		<div class="pull-left header-title">iChart</div>
+		<ul class="pull-right header-list">
+			<li>登录</li>
+			<li>注册</li>
+			<li data-target="#aboutModal" data-toggle="modal">关于</li>
+		</ul>
+	</div>
+	<div class="main">
+		<div class="main-title">制作图表也可以这么简单</div>
+		<div class="btn-content">
+			<button id="step1" class="btn btn-lg btn-clear btn-block" onclick="showModal(this,'#templateModal')">快速使用</button>
+<!-- 			<button id="step2" class="btn btn-lg btn-clear btn-block no-allow" onclick="showModal(this,'#updateModal')">上传文件</button> -->
+<!-- 			<button id="step3" class="btn btn-lg btn-clear btn-block no-allow" onclick="showModal(this,'#previewModal')">预览</button> -->
+		</div>
+	</div>
+	<div class="modal fade" id="templateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                <h4 class="modal-title" id="myModalLabel">模板</h4>
+	            </div>
+	            <div class="modal-body" style="padding:0;">
+	            	<div class="table-content">
+		            	<table class="table table-clear" id="selectTable">
+		            		<tr>
+		            			<td>
+				            		<span class="chartname">柱线图</span>
+		            			</td>
+		            			<td>
+		            				<button class="btn btn-sm btn-clear">双柱双线</button>
+		            				<button class="btn btn-sm btn-clear">双柱单线</button>
+		            				<button class="btn btn-sm btn-clear">单柱单线</button>
+		            				<button class="btn btn-sm btn-clear">单柱双线</button>
+		            				<button class="btn btn-sm btn-clear">双柱</button>
+		            				<button class="btn btn-sm btn-clear">双线</button>
+		            			</td>
+		            		</tr>
+		            		<tr>
+		            			<td>
+				            		<span class="chartname"><i class="iconfont icon-chart-bar"></i>饼图</span>
+		            			</td>
+		            			<td>
+		            				<button class="btn btn-sm btn-clear">实心饼图</button>
+		            				<button class="btn btn-sm btn-clear">空心饼图</button>
+		            			</td>
+		            		</tr>
+		            	</table>
+		            </div>
+		            <div class="form-clear clearfix">
+		            	<div class="col-sm-6" style="height:100%;padding:10px 0;">
+				            <div class="input-content clearfix" id="inputMesg" style="height:40%;overflow:auto;"></div>
+				            <div class="valueTable-content" id="valueTableDiv" style="height:60%;">
+				            	<div class="table-title">
+					            	<button type="button" class="btn btn-info btn-sm" onclick="echarts_page.batchUpdateData()" id="uploadbatchData">批量上传数据</button>
+					            	<button type="button" class="btn btn-info btn-sm" onclick="echarts_page.createtable(null,'create');" id="ceateTable">
+									  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+									</button>
+				            	</div>
+				            	<div class="table-responsive" style="height:calc(100% - 52px);overflow:auto;">
+					            	<table id="valueTable" class="table table-clear text-nowrap">
+					            		<thead id="valueTableThead">
+					            			<tr id="valueTableTheadtr"></tr>
+					            		</thead>
+					            		<tbody id="valueTableTbody">
+					            		</tbody>
+					            	</table>
+				            	</div>
+				            </div>
+				        </div>    
+			            <div class="col-sm-6 chart-content" style="height:100%;padding:10px 8px 10px 10px;">
+			            	<div style="height:100%;" id="startEchart"></div>
+			            	<div style="height:100%;" id="ehcartContain"></div>
+			            </div>
+		            </div>
+	            </div>
+	            <div class="modal-footer">
+	            	<form action="/echartsUploadData/downLoadTemplet" method="post" style="display:none;">
+					    <input name="chartType" id="chartType" value="doublebarandline">
+					    <input name="mesg" id="mesg" value="doublebarandline">
+					    <input name="title" id="title" value="doublebarandline">
+					    <input name="subTitle" id="subTitle" value="doublebarandline">
+					    <button type="submit" id="submit">下载</button>
+					</form>
+					<button type="button" class="btn btn-success"  onclick="echarts_page.pictureChange('normal');echarts_page.drawInputs();" id="example">预览</button>
+					<button class="btn btn-success" onclick="echarts_page.gettableValue();" id="simpleButton">数据上传</button>
+	                <button class="btn btn-success" onclick="showModal(this,'#updateModal');" id="batchButton">文件上传</button>
+	                <button type="button" class="btn btn-blue" onclick="echarts_page.saveEchartMesg();" id="saveButton">保存</button>
+	                <button type="button" class="btn btn-blue" onclick="echarts_page.getEchartLink();" id="copyLink">复制链接</button>
+	                <button type="button" class="btn btn-yellow" onclick="echarts_page.showButton(false)"id="downloadModalBtn">取消</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog modal-sm">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                <h4 class="modal-title" id="myModalLabel">上传</h4>
+	            </div>
+	            <div class="modal-body">
+	            	<form id="fileUploadForm" class="form-horizontal"   enctype ="multipart/form-data">
+	            		<input type="file" name="importFile" class="btn btn-clear btn-block" />
+	            	</form>	
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-blue" onclick="echarts_page.upLoadExcel();">确定</button>
+	                <button type="button" class="btn btn-yellow" data-dismiss="modal" id="uploadModalBtn">取消</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                <h4 class="modal-title" id="myModalLabel">预览</h4>
+	            </div>
+	            <div class="modal-body">
+<!-- 	            	<div style="width:100%;height:100%;" id="ehcartContain"></div> -->
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-blue" onclick="echarts_page.saveEchartMesg();">保存</button>
+	                <button type="button" class="btn btn-blue" onclick="echarts_page.getEchartLink();">复制链接</button>
+	                <button type="button" id="hidegetEchartLink" class="btn btn-yellow" data-dismiss="modal">取消</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog modal-lg">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                <h4 class="modal-title" id="">关于</h4>
+	            </div>
+	            <div class="modal-body about-content" id="">
+	            	<h3><span class="color-ED6C00">iChart</span>，让法律人与众不同</h3>
+					<p>iChart（北京新橙科技有限公司）从2013年底开始创业，至今已有8000多名法律人走进iCourt法学院，他们中有律师、法官、法务、检察官、法学院老师，怀着共同的理念相聚于此，研习技能、开阔视野、交流合作，通过没有围墙的课堂连接在一起，成为真正的法律共同体。这个数字，每一天都在快速增长。</p>
+					<h3><span class="color-ED6C00">核心能力</span>：技术派律师必备技能</h3>
+					<p>
+iCourt 提供一系列法律人终身受益的思维技能课程，包括法律人的核心业务能力、市场开拓能力和法律新技术能力，目前核心业务能力的课程包括出庭、证据、写作、法律逻辑、合同审查、法律顾问、尽职调查、诉讼逆转；市场开拓能力课程包括谈判、心理学、演讲、客户管理；法律新科技能力课程包括可视化、大数据、iMac。
+
+通过体系化学习，将掌握领先的思维方式和执业技能，极大提升工作效率和效果；同时还将获得先进的工作设备、便捷的软件工具、终身的复课学习机会和超值的升级体验</p>
+					<h3><span class="color-ED6C00">Alpha（阿尔法）</span>：最智能的律师工作系统</h3>
+					<p>
+Alpha是一套集律所管理、法律大数据和专业服务为一体的智能办案系统。Alpha包括合案件管理、文档管理、客户管理三大律师工作核心模块，将可视化、大数据和人工智能三大前沿技术融入每一个模块，提高律师专业判断的准确度，实时反馈团队成员的参与度，增强客户享受法律服务的满意度。
+Alpha是律师团队的新成员，TA聪明、勤奋、忠心、贴心，使用Alpha管理团队和办理案件将极大提高法律人的工作效率和效能。</p>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" id="" class="btn btn-yellow" data-dismiss="modal">关闭</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>	
+	<script>
+		function showModal(_this,modal){
+			if(!$(_this).hasClass("no-allow")){
+				$(modal).modal("show");
+			}
+		}
+	</script>
+</body>
+<script type="text/javascript" src="/echart/echarts3/echarts.js"></script>
+<script type="text/javascript" src="/echart/echarts3/echarts-util.js"></script>
+<script type="text/javascript" src="/echart/dark.js"></script>
+<script>
+	var echarts_page={
+			chartType:"",
+			drawType:"",
+			id:"",
+			chartname:"",
+			startdata:null,
+			startoptions:[],
+			startoptionsName:[],
+			starttitles:[],
+			startcolum:[],
+			titles:0,
+			col:0,
+			
+			/**
+			 * 批量上传
+			 */
+		    batchUpdateData:function(){
+		    	echarts_page.downLoadExcel();
+		    	$("#simpleButton").hide();
+		    	$("#batchButton").show();
+		    },
+			
+			/**
+			 * 获取图形定制信息
+			 */
+			drawInputs :function(){
+				echarts_page.startoptions=[];
+				switch(echarts_page.drawType){
+				case "barAndLine":
+					echarts_page.startdata.title=$("#titles"+0).val();
+					echarts_page.startoptions.push(echarts_page.startdata.title);
+					echarts_page.startdata.subTitle=$("#titles"+1).val();
+					echarts_page.startoptions.push(echarts_page.startdata.subTitle);
+					for(var i=0;i<echarts_page.startdata.data.length;i++){
+						for(var j=0;j<echarts_page.col;j++){
+							if(echarts_page.startdata.data[i].group==echarts_page.startcolum[j]){
+								echarts_page.startdata.data[i].group=$("#colum"+j).val();
+							}
+						}
+					}
+					echarts_page.startcolum=[];
+					$("[name=excelColName]").each(function(){
+						echarts_page.startcolum.push($(this).val());
+						echarts_page.startoptions.push($(this).val());
+					});
+					break;
+				case "pie":
+					echarts_page.startdata.title=$("#titles"+0).val();
+					echarts_page.startdata.subTitle=$("#titles"+1).val();
+					break;
+				}
+				echarts_page.drawChart(echarts_page.startdata.data,echarts_page.startdata,"startEchart");
+			},
+			
+			/**
+			 * 获取图形连接
+			 */
+			getEchartLink :function(){
+				echarts_page.saveEchartMesg(true);
+				var link=window.location.host+"/html/bi-gis/tongjiPage/qianzhan/home4.html?id="+echarts_page.id;
+				    var textArea = document.createElement("textarea");
+				      textArea.style.position = 'fixed';
+				      textArea.style.top = '0';
+				      textArea.style.left = '0';
+				      textArea.style.width = '2em';
+				      textArea.style.height = '2em';
+				      textArea.style.padding = '0';
+				      textArea.style.border = 'none';
+				      textArea.style.outline = 'none';
+				      textArea.style.boxShadow = 'none';
+				      textArea.style.background = 'transparent';
+				      textArea.value = link;
+				      var modal = document.getElementById("previewModal");
+				      modal.appendChild(textArea);
+				      textArea.select();
+
+				      try {
+				        var successful = document.execCommand('copy');
+				        var msg = successful ? '成功复制到剪贴板' : '该浏览器不支持点击复制到剪贴板';
+				       alert(msg);
+				      } catch (err) {
+				        alert('该浏览器不支持点击复制到剪贴板');
+				      }
+
+				      modal.removeChild(textArea);
+
+			},
+			
+			/**
+			 * 确认存储信息
+			 */
+			saveEchartMesg :function(type){
+				$.ajax({
+					url:"/echartsUploadData/saveEchartsMesg",
+					type: "post", 
+					dataType:"json",
+					success: function (json) {
+						if(json.result){
+							if(type){
+								
+							}else{
+								alert("保存成功");
+								echarts_page.showButton(false);
+								$("#example").click();
+							}
+							echarts_page.id=json.id;
+						}
+					}
+				});
+			},
+			
+			/**
+			 * 上传excel
+			 */
+			upLoadExcel :function(){
+				//上传数据
+				$("#fileUploadForm").ajaxSubmit({
+					type : "post",
+					url : "/echartsUploadData/uploadData",
+					dataType : "json",
+					success : function(json) {
+						if(json.result){
+							$("#uploadModalBtn").click();
+// 							$("#step3").attr("class","btn btn-lg btn-clear btn-block");
+							var typeOptionData=json.typeOptionData;
+							var data=typeOptionData.data;
+							var option=typeOptionData.options;
+							echarts_page.chartData.data = data;
+							echarts_page.chartData.option = option;
+							echarts_page.pictureChange("realPreview");
+							echarts_page.drawChart(data,option,"ehcartContain");
+							echarts_page.showButton(true);
+						}
+					}
+				});
+			},
+			
+			/**
+			 * 切换图形
+			 */
+			pictureChange:function(status){
+				if("realPreview"==status){
+					$("#startEchart").hide();
+					$("#ehcartContain").show();
+				}else{
+					$("#startEchart").show();
+					$("#ehcartContain").hide();
+				}
+			},
+			
+			/**
+			 * 图标数据
+			 */
+			chartData:{
+				data:null,
+				oldData:null,
+				option:null,
+				oldOption:null
+			},
+			
+			upChartData:function(){
+				var chartData = echarts_page.chartData;
+				if(chartData.data != chartData.oldData || chartData.option != chartData.oldOption){
+					chartData.oldData = chartData.data;
+					chartData.oldOption = chartData.option;
+					echarts_page.drawChart(chartData.data,chartData.option,"ehcartContain");
+				}
+			},
+			
+			/**
+			 * 选择图形
+			 */
+			changeEchartsType :function(echartType,belongTo,name){
+				/**
+				 * chart切换开始
+				 */
+				 echarts_page.pictureChange("normal");
+				/**
+				 * chart切换结束
+				 */
+				echarts_page.chartType=echartType;
+				echarts_page.drawType=belongTo;
+				echarts_page.chartname=name;
+				$.ajax({
+					url:"/echartsUploadData/getInputMesg",
+					type: "post", 
+					data:{
+						chartType:echartType
+					},
+					dataType:"json",
+					success: function (json) {
+						if(json.success){
+							var mesg=json.inputMesg;
+							var inputhtml="";
+							echarts_page.startoptions=[];
+							echarts_page.startoptionsName=[];
+							echarts_page.starttitles=[];
+							echarts_page.startcolum=[];
+							echarts_page.titles=0;
+							echarts_page.col=0;
+							echarts_page.createtable(json.tableHeadMesg,"create");
+							//加载input框的个数
+							for(var i=0;i<mesg.length;i++){
+								inputhtml+='<div class="col-sm-4"><label class="control-label">'+mesg[i];
+								if(mesg[i].indexOf('标题')!=-1){
+									inputhtml+='</label><input type="text" id="titles'+echarts_page.titles+'" name="titles" value="'+mesg[i]+'" class="form-control input-sm input-clear" /></div>';
+									echarts_page.titles++;
+									echarts_page.starttitles.push(mesg[i]);
+								}else{
+									inputhtml+='</label><input type="text" id="colum'+echarts_page.col+'" name="excelColName" value="'+mesg[i]+'" class="form-control input-sm input-clear" /></div>';
+									echarts_page.col++;
+									echarts_page.startcolum.push(mesg[i]);
+								}
+								echarts_page.startoptions.push(mesg[i]);
+								echarts_page.startoptionsName.push(mesg[i]);
+							}
+							$("#inputMesg").html(inputhtml);
+							echarts_page.startdata=json.data;
+							echarts_page.drawChart(echarts_page.startdata.data,echarts_page.startdata,"startEchart");
+							
+						}
+					}
+				});
+			},
+			tableColNum:0,
+			//创建表格 参数  表头内容  是否创建删除新列
+			createtable :function(tableHeadMesg,cflag){
+				if(tableHeadMesg!=null){
+					echarts_page.tableColNum=0;
+					$("#valueTableTheadtr").html("");
+					$("#valueTableTbody").html("");
+					//动态填入表格头部
+					for(var i=0;i<tableHeadMesg.length;i++){
+						$("#valueTableTheadtr").append("<td>"+tableHeadMesg[i]+"</td>");
+						echarts_page.tableColNum++;
+					}
+					$("#valueTableTheadtr").append("<td>操作</td>");
+					//显示表格
+					$("#valueTableDiv").show();
+				}
+				if(cflag=="create"){
+					//动态填入表格头部
+					var tr="<tr>";
+					for(var i=0;i<echarts_page.tableColNum;i++){
+						tr+='<td><input type="text"  value="'+i+'" class="form-control input-clear" /></td>';
+					}
+					tr+='<td><button type="button" class="btn btn-danger btn-sm" name="deleteBtnSpan">'+
+					'<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td></tr>';
+					$("#valueTableTbody").append(tr)
+					$("[name=deleteBtnSpan]").click(function () {
+						$(this).parent("td").parent("tr").remove();
+		            });
+				}
+			},
+			//获取表格中的数据
+			gettableValue:function(){
+				echarts_page.loadFistModal();
+				var dom=[];
+				$("#valueTableTbody tr").each(function(){
+					var value=[];
+					$(this).children("td").each(function(){
+						if($(this).children( "button" ).length ==0){
+							value.push($(this).children("input").val());
+						}
+					});
+					dom.push(value);
+				});
+				$.ajax({
+					url:"/echartsUploadData/uploadDataHtml",
+					type: "post", 
+					traditional: true,
+					data:{
+						excelTable:dom,
+						chartType:$("#chartType").val(),
+						mesg:$("#mesg").val(),
+						title:$("#title").val(),
+						subTitle:$("#subTitle").val(),
+					},
+					success: function (json) {
+						if(json.result){
+							$("#uploadModalBtn").click();
+							$("#step3").attr("class","btn btn-lg btn-clear btn-block");
+							var typeOptionData=json.typeOptionData;
+							var data=typeOptionData.data;
+							var option=typeOptionData.options;
+							echarts_page.pictureChange("realPreview");
+							echarts_page.drawChart(data,option,"ehcartContain");
+							echarts_page.showButton(true);
+						}
+					}
+				});
+			},
+			
+			/**
+			 * 填充数据
+			 */
+			loadFistModal :function(){
+				if(echarts_page.chartType==""){
+					alert("请选择图形！");
+				}
+				//data-html="true" data-toggle="tooltip" data-placement="right" title="右侧的 Tooltip"
+				var str=echarts_page.chartname+"</br>";
+				for(var i=0;i<echarts_page.startoptionsName.length;i++){
+					str+=echarts_page.startoptionsName[i]+":"+echarts_page.startoptions[i]+"</br>";
+				}
+				
+// 				$("#step1").attr('title',str).tooltip('fixTitle').tooltip('show');data-html="true" data-toggle="tooltip" data-placement="right" title="未选择模板"
+				var inputMesg=[];
+				$("[name=excelColName]").each(function(){
+					inputMesg.push($(this).val());
+				});
+				var titles=[];
+				$("[name=titles]").each(function(){
+					titles.push($(this).val());
+				});
+				$("#chartType").val(echarts_page.chartType);
+				$("#mesg").val(JSON.stringify(inputMesg));
+				$("#subTitle").val(titles[1]);
+				$("#title").val(titles[0]);
+			},
+			
+			/**
+			 * 下载数据模板
+			 */
+			downLoadExcel :function(){
+				echarts_page.loadFistModal();
+				var btn=$("#submit");
+				btn.click();
+// 				$("#step2").attr("class","btn btn-lg btn-clear btn-block");
+// 				$("#downloadModalBtn").click();
+			},
+			
+			/**
+			 * 绘制图形
+			 */
+			drawChart :function(data1,options,id){
+				var option=null;
+				switch(echarts_page.drawType){
+					case "barAndLine":
+						option = MyEcharts.EchartsOption.barAndLine(options.title,options.subTitle,data1);
+						break;
+					case "pie":
+						option = MyEcharts.EchartsOption.pie(options.title,options.subTitle,data1,options.type);
+						break;
+				}
+				MyEcharts.initChart(option,id,"dark");
+			},
+			
+			/**
+			 * save、copylInk
+			 */
+			 showButton:function(status){
+				if(status){
+					$("#saveButton").show();
+					$("#copyLink").show();
+					$("#simpleButton").hide();
+			    	$("#batchButton").hide();
+			    	$("#example").hide();
+			    	$("#ceateTable").attr("disabled","disabled");
+			    	$("#uploadbatchData").attr("disabled","disabled");
+				}else{
+					$("#saveButton").hide();
+					$("#copyLink").hide();
+					$("#example").show();
+					$("#simpleButton").show();
+					$("#batchButton").hide();
+					$("#ceateTable").removeAttr("disabled");
+					$("#uploadbatchData").removeAttr("disabled");
+				}
+			}
+	}
+	
+	
+	$(function(){
+		$("[data-toggle='tooltip']").tooltip();
+		$.ajax({
+			type: "post", 
+			url:"/echartsUploadData/getEchartType",
+			success: function (json) {
+				if(json.success){
+					var mesg=json.mesg;
+					var tablehtml="";
+					for(var i=0;i< mesg.length;i++){
+						tablehtml+='<tr><td><span class="chartname">';
+						tablehtml+=(mesg[i].name=="柱线图")?'<i class="iconfont icon-chart-bar"></i>':'<i class="iconfont icon-chartpie"></i>';
+						tablehtml+=mesg[i].name+'</span></td><td>';
+						var detail=mesg[i].detail;
+						for(var j=0;j<detail.length;j++){
+							tablehtml+='<button class="btn btn-sm btn-clearblue" onclick="echarts_page.changeEchartsType(\''+detail[j].type+'\',\''+mesg[i].type+'\',\''+detail[j].name+'\')">'+detail[j].name+'</button>';
+						}
+						tablehtml+='</td></tr>';
+					}
+					$("#selectTable").html(tablehtml);
+				}
+			}
+		});
+		
+		$(function () {
+			$('.btn-content .btn').tooltip('show');
+		    /**
+		     * 初始页面隐藏数据表格
+		     */
+		     $("#valueTableDiv").hide();
+		     echarts_page.showButton(false);
+		});
+		
+		/* 预览模态框显示后再绘制图表 */
+		$("#previewModal").on('shown.bs.modal', function () {
+			echarts_page.upChartData();
+		})
+	});
+</script>
+</html>

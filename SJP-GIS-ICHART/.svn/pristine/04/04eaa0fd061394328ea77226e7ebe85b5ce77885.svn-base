@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <title>videoSee</title>
+    <script src="/js/video/videoDesktop/example_d/libs/jquery-2.1.1.min.js"></script>
+    <script src="/js/video/videoDesktop/example_d/libs/strophe/strophe.js"></script>
+    <script src="/js/video/videoDesktop/example_d/libs/strophe/strophe.disco.min.js?v=1"></script>
+    <script src="/js/video/videoDesktop/example_d/lib-jitsi-meet.min.js"></script>
+    <style type="text/css">
+    	#localVideoD{
+    		width:100%;
+    		height:100%
+    	}
+    	#localVideoV{
+    		width:200px;
+    	}
+    	
+    </style>
+</head>
+<body>
+	<div>
+<!-- 	  <button type="button" onclick="disconnectAll();">退出</button> -->
+<!-- 	  <button type="button" onclick="showAll();">进入</button> -->
+<!-- 	  <button type="button" onclick="disconnectDesktop();">关闭共享屏幕</button> -->
+<!-- 	  <button type="button" onclick="showDesktop();">开启共享屏幕</button> -->
+<!-- 	  <button type="button" onclick="disconnectShare();">关闭本地视频</button> -->
+<!-- 	  <button type="button" onclick="showShare();">开启本地视频</button> -->
+	</div>
+	<div style="position:fixed;right: 20.5px;bottom: -91px;"><iframe name="myiframe" id="iframe_Share" src="/videoShareSee" frameborder="0" align="left" width="300" height="300" scrolling="no"></iframe></div>
+    <iframe name="myiframe1" id="iframe_Desktop" src="/videoDesktopSee" frameborder="0" width="1200" height="540" align="left" scrolling="no"></iframe>
+    <script type="text/javascript">
+		function disconnectAll(){
+			document.getElementById("iframe_Share").contentWindow.closeDesktop();
+			document.getElementById("iframe_Desktop").contentWindow.closeDesktop();
+		}
+		function showAll(){
+			document.getElementById("iframe_Share").contentWindow.switchVideo();
+			document.getElementById("iframe_Desktop").contentWindow.switchVideo();
+		}
+		function disconnectDesktop(){
+			document.getElementById("iframe_Desktop").contentWindow.closeDesktop();
+		}
+		function showDesktop(){
+			document.getElementById("iframe_Desktop").contentWindow.switchVideo();
+		}
+		function disconnectShare(){
+			document.getElementById("iframe_Share").contentWindow.closeDesktop();
+		}
+		function showShare(){
+			document.getElementById("iframe_Share").contentWindow.switchVideo();
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+package com.berheley.ichart.dao;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+import com.berheley.ichart.domain.TEcharts;
+public interface echartsRepository extends PagingAndSortingRepository<TEcharts,String> {
+	
+	public TEcharts save(TEcharts techarts);
+	
+	public TEcharts findOne(String id);
+
+}

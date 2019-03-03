@@ -1,0 +1,51 @@
+package com.berheley.ichart.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+public class HomeController {
+
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String loginPage() {
+		return "index";
+	}
+	
+	@RequestMapping(value="/userCenter")
+	public String userCenter() {
+		return  "user";
+	}
+	
+	@RequestMapping(value="/videoSee")
+	public String videoSee() {
+		return  "videoSee";
+	}
+	
+	@RequestMapping(value="/videoShare")
+	public String videoShare(){
+		return "/videoShare";
+	}
+	
+	@RequestMapping(value="/videoDesktop")
+	public String videoDesktop(){
+		return "/videoDesktop";
+	}
+	
+	@RequestMapping(value="/videoExample")
+	public String videoExample(){
+		return "/videoExample";
+	}
+	
+	@RequestMapping(value="/videoDesktopSee")
+	public String videoDesktopSee(){
+		return "/videoDesktopSee";
+	}
+	
+	@RequestMapping(value="/videoShareSee")
+	public String videoShareSee(){
+		return "/videoShareSee";
+	}
+	
+}

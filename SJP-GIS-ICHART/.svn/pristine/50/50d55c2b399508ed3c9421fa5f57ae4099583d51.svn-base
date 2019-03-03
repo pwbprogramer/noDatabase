@@ -1,0 +1,160 @@
+package com.berheley.ichart.service.impl;
+
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import com.berheley.ichart.dao.userRepository;
+import com.berheley.ichart.domain.User;
+import com.berheley.ichart.service.UserService;
+import com.berheley.ichart.utils.rySmsUtil;
+
+@Service
+public class UserServiceImpl extends BaseServiceImpl implements UserService {
+    
+	@Autowired
+	private userRepository userDao;
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = (User)getRestTemplateObject("http://hujia-user/loadUserByUsername?userName="+username,new HashMap<>(),User.class);
+		return user;
+	}
+    
+	/**
+	 * 获取全部用户
+	 */
+	@Override
+	public List<User> getAllUser() {
+		return userDao.findAll();
+	}
+    
+	/**
+	 * 注册新用户
+	 */
+	@Override
+	public String registerNewUser(HttpServletRequest request) {
+		try {
+			User user  = new User();
+			user.setId(UUID.randomUUID().toString().replaceAll("-", "").toLowerCase());
+			user.setPassword(request.getParameter("password"));
+			user.setTelphone(request.getParameter("telphone"));
+			user.setUsername(request.getParameter("username"));
+			if(this.checkUserExist(user)) {
+				HttpSession session = request.getSession();
+				session.setAttribute("loginUser", userDao.save(user));
+				return "success";
+			}else{
+				return "ExistUserName";
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			return "failure";
+		}
+	}
+    
+	/**
+	 * 验证用户存在
+	 */
+	public boolean checkUserExist(User newUser) {
+		List<User> users = this.getAllUser();
+		for (User user : users) {
+			if(user.getUsername().equals(newUser.getUsername())) {
+				return false;
+			}
+		}
+		return true;
+	}
+	/**
+	 * 发送验证码
+	 */
+	@Override
+	public String validate(HttpServletRequest request) {
+		try{
+			//创建验证码
+			int yzm = (int)((Math.random()*9+1)*100000);
+    		String smsText = "您的短信验证码是 "+yzm+" ，请在五分钟内输入使用。超时请重新申请";
+    		rySmsUtil rySmsUtil = new rySmsUtil();
+    		//从session中获取将要登录用户
+    		HttpSession session = request.getSession();
+    		User user = (User)session.getAttribute("loginUser");
+    		//将验证码存入session
+    		session.setAttribute("identifyingCode", yzm);
+    		List<String> mobile = new ArrayList<String>();
+    		mobile.add(user.getTelphone());
+    		boolean sendYzSms=rySmsUtil.sendYzSms(smsText,mobile,"4MEkgeFJ4808LJQdkScBnU");
+    		//验证码是否失效(暂前台处理)
+//    		this.removeAttrbute(session, "identifyingCode");
+    		return "success";
+		}catch(Exception e) {
+			e.printStackTrace();
+			return "failure";
+		}
+	}
+	
+	/**
+	 * 验证码失效
+	 * (暂定5分钟)
+	 * @param session
+	 * @param attrName
+	 */
+	@SuppressWarnings("unused")
+	private void removeAttrbute(final HttpSession session, final String attrName) {
+		final Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				session.removeAttribute(attrName);
+				timer.cancel();
+			}
+		}, 5 * 60 * 1000);
+	}
+    
+	/**
+	 * 执行注册
+	 */
+	@Override
+	public boolean doRegister(HttpServletRequest request) {
+		
+		try {
+			HttpSession session = request.getSession();
+			User user = (User)session.getAttribute("loginUser");
+			userDao.save(user);
+			return true;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+    
+	/**
+	 * 根据登录名获取用户
+	 */
+	@Override
+	public boolean getUserByname(HttpServletRequest request) {
+		try {
+			String username = request.getParameter("username");
+			User user = userDao.findByUsernameLike(username);
+			HttpSession session = request.getSession();
+			session.setAttribute("loginUser", userDao.save(user));
+			return true;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+    
+}

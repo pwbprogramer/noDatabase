@@ -1,0 +1,236 @@
+package com.berheley.ichart.utils;
+
+import java.nio.charset.Charset;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+@SuppressWarnings("deprecation")
+public class rySmsUtil {
+
+	
+	private static String App_key="6tnym1br64xo7";
+	private static String App_Secret="BYboxmAqGQJS";
+	
+	private static String url="http://api.sms.ronghub.com/sendNotify.json";
+	
+	
+	/**
+	 * 发送短信
+	 * @return 
+	 */
+	public List<Map<String, String>> sendSms(String content,List<String> mobiles,String templateId){
+		
+		//生成
+		String Nonce=((int)(Math.random()*110000))+"";
+		String Timestamp=""+new Date().getTime()+"";
+		String Signature="";
+		try {
+			Signature = this.sha1(Nonce,Timestamp);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		List<Map<String, String>> result=new ArrayList<Map<String, String>>();
+		for (String mobile : mobiles) {
+			if(StringUtils.isNotBlank(mobile)&&!"null".equals(mobile)){
+				if (mobile.indexOf(',')!=-1) {
+					String[] sp = mobile.split(",");
+					for (String spmonile : sp) {
+						Map<String, String> map=new HashMap<String,String>();
+						String json =  "mobile="+spmonile+"&templateId="+templateId+"&region=86&p1="+content;
+						System.out.println(json);
+						//发送post请求
+						String str=this.sendPost(url, json, Nonce, Timestamp, Signature);
+						if(str.equals("false")){
+							map.put("phone", str);
+						}
+						result.add(map);
+					}
+				}else{
+					String json =  "mobile="+mobile+"&templateId="+templateId+"&region=86&p1="+content;
+					System.out.println(json);
+					//发送post请求
+					Map<String, String> map=new HashMap<String,String>();
+					String str=this.sendPost(url, json, Nonce, Timestamp, Signature);
+					if(str.equals("false")){
+						map.put("phone", str);
+					}
+					result.add(map);
+				}
+			}
+		}
+		return result;
+	}
+	/**
+	 * 发送验证短信
+	 * @return 
+	 */
+	public boolean sendYzSms(String content,List<String> mobiles,String templateId){
+		
+		boolean rebol = true;
+		
+		//生成
+		String Nonce=((int)(Math.random()*110000))+"";
+		String Timestamp=""+new Date().getTime()+"";
+		String Signature="";
+		try {
+			Signature = this.sha1(Nonce,Timestamp);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		List<Map<String, String>> result=new ArrayList<Map<String, String>>();
+		for (String mobile : mobiles) {
+			if(StringUtils.isNotBlank(mobile)&&!"null".equals(mobile)){
+				if (mobile.indexOf(',')!=-1) {
+					String[] sp = mobile.split(",");
+					for (String spmonile : sp) {
+						Map<String, String> map=new HashMap<String,String>();
+						String json =  "mobile="+spmonile+"&templateId="+templateId+"&region=86&p1="+content;
+						//发送post请求
+						String str=this.sendPost(url, json, Nonce, Timestamp, Signature);
+						if(str.equals("false")){
+							rebol = false;
+						}
+					}
+				}else{
+					String json =  "mobile="+mobile+"&templateId="+templateId+"&region=86&p1="+content;
+					//发送post请求
+					Map<String, String> map=new HashMap<String,String>();
+					String str=this.sendPost(url, json, Nonce, Timestamp, Signature);
+					if(str.equals("false")){
+						rebol = false;
+					}
+				}
+			}
+		}
+		return rebol;
+	}
+	
+	/**
+	 * SHAI算法
+	 * @param data
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 */
+    public String sha1(String Nonce,String Timestamp) throws NoSuchAlgorithmException {  
+        String data = App_Secret+Nonce+Timestamp;
+        return DigestUtils.shaHex(data);  
+    }  
+	
+	/**
+	 * 
+	 */
+	@SuppressWarnings("resource")
+	public String sendPost(String url, String param,String Nonce,String Timestamp,String Signature) {
+		boolean isSuccess = false;
+	    
+	    HttpPost post = null;
+	    try {
+	        HttpClient httpClient = new DefaultHttpClient();
+	            
+	        post = new HttpPost(url);
+	        // 构造消息头
+	        post.setHeader("Content-Type", "application/x-www-form-urlencoded");
+	        post.setHeader("App-Key", App_key);
+	        post.setHeader("Nonce", Nonce);
+	        post.setHeader("Timestamp", Timestamp);
+	        post.setHeader("Signature", Signature);
+	                    
+	        // 构建消息实体
+	        StringEntity entity = new StringEntity(param, Charset.forName("UTF-8"));
+	        entity.setContentEncoding("UTF-8");
+	        // 发送Json格式的数据请求
+	        entity.setContentType("application/json");
+	        post.setEntity(entity);
+	            
+	        HttpResponse response = httpClient.execute(post);
+	            
+	        // 检验返回码
+	        int statusCode = response.getStatusLine().getStatusCode();
+	        System.out.println(statusCode);
+	        if(statusCode == HttpStatus.SC_OK){
+	            isSuccess = true;
+	        }else{
+	            int retCode = 0;
+	            String sessendId = "";
+	            // 返回码中包含retCode及会话Id
+	            for(Header header : response.getAllHeaders()){
+	                if(header.getName().equals("retcode")){
+	                    retCode = Integer.parseInt(header.getValue());
+	                }
+	                if(header.getName().equals("SessionId")){
+	                    sessendId = header.getValue();
+	                }
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        isSuccess = false;
+	    }finally{
+	        if(post != null){
+	            try {
+	                post.releaseConnection();
+	                Thread.sleep(500);
+	            } catch (InterruptedException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	    return isSuccess+"";
+	}
+
+	public List<Map<String, String>> sendSms(String content,List<String> mobiles,String templateId, String status) {
+		//生成
+		String Nonce=((int)(Math.random()*110000))+"";
+		String Timestamp=""+new Date().getTime()+"";
+		String Signature="";
+		try {
+			Signature = this.sha1(Nonce,Timestamp);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		List<Map<String, String>> result=new ArrayList<Map<String, String>>();
+		for (String mobile : mobiles) {
+			if(StringUtils.isNotBlank(mobile)&&!"null".equals(mobile)){
+				if (mobile.indexOf(',')!=-1) {
+					String[] sp = mobile.split(",");
+					for (String spmonile : sp) {
+						Map<String, String> map=new HashMap<String,String>();
+						String json =  "mobile="+spmonile+"&templateId="+templateId+"&region=86&p1="+content;
+						System.out.println(json);
+						//发送post请求
+						String str=this.sendPost(url, json, Nonce, Timestamp, Signature);
+						if(str.equals("false")){
+							map.put("phone", str);
+							result.add(map);
+						}
+					}
+				}else{
+					String json =  "mobile="+mobile+"&templateId="+templateId+"&region=86&p1="+content;
+					System.out.println(json);
+					//发送post请求
+					Map<String, String> map=new HashMap<String,String>();
+					String str=this.sendPost(url, json, Nonce, Timestamp, Signature);
+					if(str.equals("false")){
+						map.put("phone", str);
+						result.add(map);
+					}
+				}
+			}
+		}
+		return result;
+	}
+}

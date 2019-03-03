@@ -1,0 +1,223 @@
+/**
+ *  author:pingweibo
+ *  time:2018/11/01
+ *  function:登录js
+ */
+
+/**
+ * 验证码倒计时
+ */
+function countDown(timeCountDown,id){
+   if(timeCountDown!=0){
+	   timeCountDown--;
+	   $("#"+id+"").text("("+timeCountDown+"S)秒");
+       $("#"+id+"").attr("disabled",true);
+	   setTimeout(function() {
+		   countDown(timeCountDown,id) }
+       ,1000)
+   }else{
+	   $("#"+id+"").attr("disabled",false);
+       $("#"+id+"").text("重新发送");
+   }
+};
+
+/**
+ * 发送验证码
+ */
+function sendIdentifyingCode(type){
+	var button = "sendCode_login";
+	//表单验证
+	if(type=="login"){
+		if(!$('#loginForm').validate().form()){
+			return;
+		}
+		if(checkUserExist()){
+			return;
+		}
+	}else{
+		button = "sendCode_register";
+		if(!$('#registerForm').validate().form()){
+			return;
+		}
+		if(sendRegisterUserMessage()){
+			return;
+		};
+	}
+	//发送验证码
+	$.ajax({
+		url:"/sendCode",
+		type:"get",
+		success:function(result){
+			if("success"==result){
+				var timeCountDown = 300;
+				countDown(timeCountDown,button);
+				if(type=="register"){
+					$("#registerButton").removeAttr("disabled");
+				}else{
+					$("#loginButton").removeAttr("disabled");
+				}
+			}else{
+				alert("请输入有效联系方式");
+			}
+		}
+	})
+};
+
+/**
+ * 校验验证码
+ */
+function checkCode(type){
+	var url ="/validate?"
+	if(type=="register"){
+		url+=$('#registerForm').serialize();
+	}else{
+		url+=$('#loginForm').serialize();
+	}	
+	$.ajax({
+		url:url,
+		type:"get",
+		success:function(result){
+			if(result){
+				if(type=="register"){
+					registerAndLogin();
+				}else{
+					login("login");
+				}
+			}else{
+				alert("验证码错误，请从新输入");
+			}
+		}
+	})
+};
+
+/**
+ * 完成注册并登录
+ */
+function registerAndLogin(){
+	$.ajax({
+		url:"/doRegister",
+		type:"get",
+		success:function(result){
+			if(result){
+				$("#registerButton").attr("disabled","disabled");
+				login("register");
+			}else{
+				alert("注册失败");
+			}
+		}
+	})
+};
+
+/**
+ * 登录
+ */
+function login(type){
+	var param = {};
+	if("register"==type){
+		param.username = $("#registerForm input[name='username']").val();
+		param.password = $("#registerForm input[name='password']").val();
+	}else{
+		param.username = $("#loginForm input[name='username']").val();
+		param.password = $("#loginForm input[name='password']").val();
+	}
+	$.ajax({
+		url:"/login",
+		type:"post",
+		dataType:"json",
+		headers:{
+			"Content-type":"application/json; charset=utf-8"
+		},
+		data:JSON.stringify(param),
+		success:function(result){
+			$("#loginButton").attr("disabled","disabled");
+            $("#loginModal").modal("hide");
+            window.location.href="/userCenter";
+		},
+		error:function(){
+			alert("密码错误,请核对后重新输入");
+		}
+	})
+};
+
+/**
+ * 用户是否已经注册
+ */
+function sendRegisterUserMessage(){
+	$.ajax({
+		url:"/register?"+$('#registerForm').serialize(),
+		type:"get",
+		async:false,
+		success:function(result){
+			if("success"==result){
+				return false;
+			}else if("ExistUserName"==result){
+				alert("该用户已存在");
+				return true;
+			}else{
+				return true;
+			}
+		}
+	})
+};
+
+/**
+ * 检测登录用户是否存在
+ */
+function checkUserExist(){
+	$.ajax({
+		url:"/getUserByname?"+$('#loginForm').serialize(),
+		type:"get",
+		async:false,
+		success:function(result){
+			if(result){
+				return false;
+			}else{
+				alert("用户不存在,请核对登录用户名");
+				return true;
+			}
+		}
+	})
+};
+
+$(function(){
+	$("#loginForm").validate({
+		rules:{
+			username:{
+				required: true
+			},
+			password:{
+				required:true
+			}
+		},
+		messages:{
+			username:"请填写用户名",
+			password:"请填写密码"
+		}
+	})
+	$("#registerForm").validate({
+		rules:{
+			username:{
+				required: true
+			},
+			password:{
+				required:true
+			},
+			confirmPassword:{
+				required:true,
+				equalTo:"#new_password" 
+			},
+			telphone:{
+				required:true
+			}
+		},
+		messages:{
+			username:"请填写用户名",
+			password:"请填写密码",
+			confirmPassword:{
+				required:"请确认密码",
+				equalTo:"两次密码输入不一致"
+			},
+			telphone:"请填写移动电话号码"
+		}
+	})
+})

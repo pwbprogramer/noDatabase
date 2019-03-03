@@ -1,0 +1,57 @@
+spring.datasource.url = jdbc:mysql://192.168.1.204:3338/SJP-GIS-ICHART
+spring.datasource.username = oa
+spring.datasource.password = 111111
+
+# Specify the DBMS
+spring.jpa.database = MYSQL
+# Show or not log for each sql query
+spring.jpa.show-sql = true
+# Hibernate ddl auto (create, create-drop, update)
+spring.jpa.hibernate.ddl-auto = update
+# Naming strategy
+spring.jpa.hibernate.naming.strategy = org.hibernate.cfg.ImprovedNamingStrategy
+
+# stripped before adding them to the entity manager)
+spring.jpa.properties.hibernate.dialect = com.berheley.ichart.dialect.MySql5ExtendDialect
+# Add @EnableAspectJAutoProxy.
+spring.aop.auto=true 
+
+jwt.header=Authorization
+jwt.secret=HuJiaSecret
+jwt.expiration=604800
+jwt.route.authentication.path=home/auth
+jwt.route.authentication.refresh=refresh
+
+#\u6682\u65f6\u4e0d\u9650\u5236\u4e0a\u4f20\u6587\u4ef6\u5927\u5c0f  spring.http.multipart.max-file-size=50MB
+spring.http.multipart.max-file-size=-1
+spring.http.multipart.max-request-size=-1
+
+spring.thymeleaf.prefix=classpath:/templates/
+spring.thymeleaf.cache: false
+spring.thymeleaf.mode: html
+
+server.port=8081
+
+#DataBase-Redis
+spring.redis.host=127.0.0.1
+spring.redis.port=6379
+spring.redis.pool.max-idle=100
+spring.redis.pool.min-idle=10
+
+#socketio \u76f8\u5173\u914d\u7f6e
+socketio.host=localhost
+socketio.port=9006
+# \u8bbe\u7f6e\u6700\u5927\u6bcf\u5e27\u5904\u7406\u6570\u636e\u7684\u957f\u5ea6\uff0c\u9632\u6b62\u4ed6\u4eba\u5229\u7528\u5927\u6570\u636e\u6765\u653b\u51fb\u670d\u52a1\u5668
+socketio.maxFramePayloadLength=1048576
+# \u8bbe\u7f6ehttp\u4ea4\u4e92\u6700\u5927\u5185\u5bb9\u957f\u5ea6
+socketio.maxHttpContentLength=1048576
+# socket\u8fde\u63a5\u6570\u5927\u5c0f\uff08\u5982\u53ea\u76d1\u542c\u4e00\u4e2a\u7aef\u53e3boss\u7ebf\u7a0b\u7ec4\u4e3a1\u5373\u53ef\uff09
+socketio.bossCount=1
+socketio.workCount=100
+socketio.allowCustomRequests=true
+# \u534f\u8bae\u5347\u7ea7\u8d85\u65f6\u65f6\u95f4\uff08\u6beb\u79d2\uff09\uff0c\u9ed8\u8ba410\u79d2\u3002HTTP\u63e1\u624b\u5347\u7ea7\u4e3aws\u534f\u8bae\u8d85\u65f6\u65f6\u95f4
+socketio.upgradeTimeout=1000000
+# Ping\u6d88\u606f\u8d85\u65f6\u65f6\u95f4\uff08\u6beb\u79d2\uff09\uff0c\u9ed8\u8ba460\u79d2\uff0c\u8fd9\u4e2a\u65f6\u95f4\u95f4\u9694\u5185\u6ca1\u6709\u63a5\u6536\u5230\u5fc3\u8df3\u6d88\u606f\u5c31\u4f1a\u53d1\u9001\u8d85\u65f6\u4e8b\u4ef6
+socketio.pingTimeout=6000000
+# Ping\u6d88\u606f\u95f4\u9694\uff08\u6beb\u79d2\uff09\uff0c\u9ed8\u8ba425\u79d2\u3002\u5ba2\u6237\u7aef\u5411\u670d\u52a1\u5668\u53d1\u9001\u4e00\u6761\u5fc3\u8df3\u6d88\u606f\u95f4\u9694
+socketio.pingInterval=25000

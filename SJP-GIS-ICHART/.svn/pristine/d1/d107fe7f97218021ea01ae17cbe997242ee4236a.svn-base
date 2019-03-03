@@ -1,0 +1,24 @@
+package com.berheley.ichart.service.impl;
+
+
+import java.util.HashMap;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import com.berheley.ichart.domain.User;
+import com.berheley.ichart.service.UserService;
+
+@Service
+public class UserServiceImpl extends BaseServiceImpl implements UserService {
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = (User)getRestTemplateObject("http://hujia-user/loadUserByUsername?userName="+username,new HashMap<>(),User.class);
+//		user.setPassword("1");
+		return user;
+	}
+
+    
+}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head lang="en">
+	    <meta charset="UTF-8">
+	    <title></title>
+	    <script src="/js/video/libs/jquery-2.1.1.min.js"></script>
+	    <script src="/js/video/libs/lib-jitsi-meet.min.js"></script>
+	    <script src="/js/video/videoLive/videoLiveCamera.js" ></script>
+	    <style type="text/css">
+	    	video{
+	    		width:300px;
+	    		height:170px;
+	    	}
+	    </style>
+	</head>
+	<body>
+		<video autoplay='1' id='localCamera' />
+		<audio autoplay='1' id='localAudio' />
+	</body>
+</html>

@@ -1,0 +1,53 @@
+package com.berheley.ichart.socketIo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.corundumstudio.socketio.HandshakeData;
+import com.corundumstudio.socketio.SocketIOClient;
+import com.corundumstudio.socketio.annotation.OnConnect;
+import com.corundumstudio.socketio.annotation.OnDisconnect;
+import com.corundumstudio.socketio.annotation.OnEvent;
+
+@Component
+public class EventListenner {
+	
+	@Autowired
+	private SocketIOClientCache clientCache;
+	
+	@Autowired
+    private SocketIOResponse socketIOResponse;
+     
+    @OnConnect
+    public void onConnect(SocketIOClient client) {
+    	HandshakeData hd = client.getHandshakeData();
+    	TMessageBean messageBean = new TMessageBean();
+    	messageBean.setFromClient(hd.getSingleUrlParam("user"));
+    	clientCache.addClient(client, messageBean);
+    }
+ 
+    @OnEvent("OnLocatingMessage")
+    public void OnLocatingMessage(TMessageBean messageBean) {
+        SocketIOClient ioClients = clientCache.getClient(messageBean.getToClient());
+        if (ioClients == null) {
+            System.out.println("你发送消息的用户不在线");
+            return;
+        }
+        socketIOResponse.sendEvent(ioClients,"OnLocatingMessage",messageBean);
+    }
+ 
+    @OnEvent("OnDataMessage")
+    public void OnDataMessage(TMessageBean messageBean) {
+        SocketIOClient ioClients = clientCache.getClient(messageBean.getToClient());
+        if (ioClients == null) {
+            System.out.println("你发送消息的用户不在线");
+            return;
+        }
+        socketIOResponse.sendEvent(ioClients,"OnDataMessage",messageBean);
+    }
+    
+    @OnDisconnect
+    public void onDisconnect(SocketIOClient client) {
+    	clientCache.remove(client.get("userId"));
+    }
+}

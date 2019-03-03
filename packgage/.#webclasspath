@@ -1,6 +1,4 @@
-E:\WorkSpaces\packgage\target\classes
-E:\WorkSpaces\packgage\target\test-classes
-D:\MavenRepo\junit\junit\3.8.1\junit-3.8.1.jar
+E:\gitWorkspaces\packgage\target\classes
 D:\MavenRepo\org\springframework\spring-context\4.3.17.RELEASE\spring-context-4.3.17.RELEASE.jar
 D:\MavenRepo\org\springframework\spring-beans\4.3.17.RELEASE\spring-beans-4.3.17.RELEASE.jar
 D:\MavenRepo\org\springframework\spring-expression\4.3.17.RELEASE\spring-expression-4.3.17.RELEASE.jar
@@ -22,3 +20,13 @@ D:\MavenRepo\javax\servlet\javax.servlet-api\4.0.1\javax.servlet-api-4.0.1.jar
 D:\MavenRepo\javax\servlet\jsp\jsp-api\2.2\jsp-api-2.2.jar
 D:\MavenRepo\javax\servlet\jstl\1.2\jstl-1.2.jar
 D:\MavenRepo\taglibs\standard\1.1.2\standard-1.1.2.jar
+D:\MavenRepo\c3p0\c3p0\0.9.1.2\c3p0-0.9.1.2.jar
+D:\MavenRepo\org\springframework\data\spring-data-redis\1.7.2.RELEASE\spring-data-redis-1.7.2.RELEASE.jar
+D:\MavenRepo\org\springframework\data\spring-data-keyvalue\1.1.2.RELEASE\spring-data-keyvalue-1.1.2.RELEASE.jar
+D:\MavenRepo\org\springframework\data\spring-data-commons\1.12.2.RELEASE\spring-data-commons-1.12.2.RELEASE.jar
+D:\MavenRepo\org\springframework\spring-oxm\4.2.6.RELEASE\spring-oxm-4.2.6.RELEASE.jar
+D:\MavenRepo\org\slf4j\slf4j-api\1.7.21\slf4j-api-1.7.21.jar
+D:\MavenRepo\org\slf4j\jcl-over-slf4j\1.7.21\jcl-over-slf4j-1.7.21.jar
+D:\MavenRepo\redis\clients\jedis\2.9.0\jedis-2.9.0.jar
+D:\MavenRepo\org\apache\commons\commons-pool2\2.4.2\commons-pool2-2.4.2.jar
+E:\gitWorkspaces\packgage\target\test-classes
